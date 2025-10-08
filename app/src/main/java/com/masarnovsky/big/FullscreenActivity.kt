@@ -1,5 +1,6 @@
 package com.masarnovsky.big
 
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -13,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -30,10 +32,22 @@ class FullscreenActivity : ComponentActivity() {
         setupFullscreen()
 
         val displayText = intent.getStringExtra("DISPLAY_TEXT") ?: "No text provided"
+        val selectedFont = intent.getStringExtra("SELECTED_FONT") ?: "Default"
+        val selectedBackground = intent.getStringExtra("SELECTED_BACKGROUND") ?: "gradient"
+        val selectedOrientation = intent.getStringExtra("SELECTED_ORIENTATION") ?: "auto"
+
+        // Set orientation
+        requestedOrientation = when (selectedOrientation) {
+            "portrait" -> ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+            "landscape" -> ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+            else -> ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+        }
 
         setContent {
             FullscreenTextScreen(
                 text = displayText,
+                font = selectedFont,
+                background = selectedBackground,
                 onExit = { finish() }
             )
         }
@@ -51,14 +65,18 @@ class FullscreenActivity : ComponentActivity() {
 @Composable
 fun FullscreenTextScreen(
     text: String,
+    font: String,
+    background: String,
     onExit: () -> Unit
 ) {
-    val gradient = remember { getRandomGradient() }
+    val backgroundColor = remember(background) { getBackgroundColor(background) }
+    val textColor = remember(background) { getTextColor(background) }
+    val fontFamily = remember(font) { getFontFamily(font) }
 
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(gradient)
+            .background(backgroundColor)
             .clickable { onExit() }
             .padding(32.dp),
         contentAlignment = Alignment.Center
@@ -66,12 +84,38 @@ fun FullscreenTextScreen(
         Text(
             text = text,
             fontSize = 48.sp,
+            fontFamily = fontFamily,
             fontWeight = FontWeight.Bold,
-            color = Color.White,
+            color = textColor,
             textAlign = TextAlign.Center,
             lineHeight = 56.sp,
             modifier = Modifier.fillMaxWidth()
         )
+    }
+}
+
+fun getBackgroundColor(background: String): Brush {
+    return when (background) {
+        "black" -> Brush.linearGradient(listOf(Color.Black, Color.Black))
+        "white" -> Brush.linearGradient(listOf(Color.White, Color.White))
+        else -> getRandomGradient()
+    }
+}
+
+fun getTextColor(background: String): Color {
+    return when (background) {
+        "black" -> Color.White
+        "white" -> Color.Black
+        else -> Color.White
+    }
+}
+
+fun getFontFamily(font: String): FontFamily {
+    return when (font) {
+        "Serif" -> FontFamily.Serif
+        "Cursive" -> FontFamily.Cursive
+        "Monospace" -> FontFamily.Monospace
+        else -> FontFamily.Default
     }
 }
 

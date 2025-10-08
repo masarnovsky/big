@@ -1,13 +1,14 @@
 package com.masarnovsky.big
-
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -17,13 +18,13 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.jvm.java
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,9 +32,12 @@ class MainActivity : ComponentActivity() {
         setContent {
             FullscreenTextTheme {
                 MainScreen(
-                    onShowFullscreen = { text ->
+                    onShowFullscreen = { text, font, background, orientation ->
                         val intent = Intent(this, FullscreenActivity::class.java)
                         intent.putExtra("DISPLAY_TEXT", text)
+                        intent.putExtra("SELECTED_FONT", font)
+                        intent.putExtra("SELECTED_BACKGROUND", background)
+                        intent.putExtra("SELECTED_ORIENTATION", orientation)
                         startActivity(intent)
                     }
                 )
@@ -59,10 +63,13 @@ fun FullscreenTextTheme(content: @Composable () -> Unit) {
 @Composable
 fun MainScreen(
     viewModel: MainViewModel = viewModel(),
-    onShowFullscreen: (String) -> Unit
+    onShowFullscreen: (String, String, String, String) -> Unit
 ) {
     val inputText by viewModel.inputText.collectAsState()
     val history by viewModel.history.collectAsState()
+    val selectedFont by viewModel.selectedFont.collectAsState()
+    val selectedBackground by viewModel.selectedBackground.collectAsState()
+    val selectedOrientation by viewModel.selectedOrientation.collectAsState()
 
     Scaffold(
         topBar = {
@@ -100,12 +107,60 @@ fun MainScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
+            // Font Selector
+            Text(
+                "Font Style",
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onBackground
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+
+            FontSelector(
+                selectedFont = selectedFont,
+                onFontSelected = { viewModel.updateFont(it) }
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Background Selector
+            Text(
+                "Background",
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onBackground
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+
+            BackgroundSelector(
+                selectedBackground = selectedBackground,
+                onBackgroundSelected = { viewModel.updateBackground(it) }
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Orientation Selector
+            Text(
+                "Orientation",
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onBackground
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+
+            OrientationSelector(
+                selectedOrientation = selectedOrientation,
+                onOrientationSelected = { viewModel.updateOrientation(it) }
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
             // Show Button
             Button(
                 onClick = {
                     if (inputText.isNotBlank()) {
                         viewModel.saveText(inputText)
-                        onShowFullscreen(inputText)
+                        onShowFullscreen(inputText, selectedFont, selectedBackground, selectedOrientation)
                         viewModel.updateInputText("")
                     }
                 },
@@ -146,11 +201,196 @@ fun MainScreen(
                         text = item.text,
                         timestamp = item.timestamp,
                         onDelete = { viewModel.deleteText(item.id) },
-                        onClick = { onShowFullscreen(item.text) }
+                        onClick = {
+                            onShowFullscreen(item.text, selectedFont, selectedBackground, selectedOrientation)
+                        }
                     )
                 }
             }
         }
+    }
+}
+
+@Composable
+fun FontSelector(
+    selectedFont: String,
+    onFontSelected: (String) -> Unit
+) {
+    val fonts = listOf(
+        "Default" to FontFamily.Default,
+        "Serif" to FontFamily.Serif,
+        "Cursive" to FontFamily.Cursive,
+        "Monospace" to FontFamily.Monospace
+    )
+
+    LazyRow(
+        horizontalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        items(fonts) { (fontName, fontFamily) ->
+            FontOption(
+                fontName = fontName,
+                fontFamily = fontFamily,
+                isSelected = selectedFont == fontName,
+                onClick = { onFontSelected(fontName) }
+            )
+        }
+    }
+}
+
+@Composable
+fun FontOption(
+    fontName: String,
+    fontFamily: FontFamily,
+    isSelected: Boolean,
+    onClick: () -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .size(80.dp)
+            .background(
+                color = if (isSelected) Color(0xFF6200EE) else MaterialTheme.colorScheme.surface,
+                shape = RoundedCornerShape(12.dp)
+            )
+            .border(
+                width = 2.dp,
+                color = if (isSelected) Color(0xFF6200EE) else Color(0xFF444444),
+                shape = RoundedCornerShape(12.dp)
+            )
+            .clickable(onClick = onClick)
+            .padding(8.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = "Aa",
+                fontFamily = fontFamily,
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold,
+                color = if (isSelected) Color.White else MaterialTheme.colorScheme.onSurface
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                text = fontName,
+                fontSize = 10.sp,
+                color = if (isSelected) Color.White else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+            )
+        }
+    }
+}
+
+@Composable
+fun BackgroundSelector(
+    selectedBackground: String,
+    onBackgroundSelected: (String) -> Unit
+) {
+    val backgrounds = listOf(
+        "black" to "Black",
+        "white" to "White",
+        "gradient" to "Gradient"
+    )
+
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        backgrounds.forEach { (value, label) ->
+            BackgroundOption(
+                label = label,
+                value = value,
+                isSelected = selectedBackground == value,
+                onClick = { onBackgroundSelected(value) }
+            )
+        }
+    }
+}
+
+@Composable
+fun BackgroundOption(
+    label: String,
+    value: String,
+    isSelected: Boolean,
+    onClick: () -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .height(48.dp)
+            .background(
+                color = if (isSelected) Color(0xFF6200EE) else MaterialTheme.colorScheme.surface,
+                shape = RoundedCornerShape(12.dp)
+            )
+            .border(
+                width = 2.dp,
+                color = if (isSelected) Color(0xFF6200EE) else Color(0xFF444444),
+                shape = RoundedCornerShape(12.dp)
+            )
+            .clickable(onClick = onClick)
+            .padding(horizontal = 24.dp, vertical = 12.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            text = label,
+            fontSize = 14.sp,
+            fontWeight = FontWeight.Medium,
+            color = if (isSelected) Color.White else MaterialTheme.colorScheme.onSurface
+        )
+    }
+}
+
+@Composable
+fun OrientationSelector(
+    selectedOrientation: String,
+    onOrientationSelected: (String) -> Unit
+) {
+    val orientations = listOf(
+        "auto" to "Auto",
+        "portrait" to "Portrait",
+        "landscape" to "Landscape"
+    )
+
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        orientations.forEach { (value, label) ->
+            OrientationOption(
+                label = label,
+                value = value,
+                isSelected = selectedOrientation == value,
+                onClick = { onOrientationSelected(value) }
+            )
+        }
+    }
+}
+
+@Composable
+fun OrientationOption(
+    label: String,
+    value: String,
+    isSelected: Boolean,
+    onClick: () -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .height(48.dp)
+            .background(
+                color = if (isSelected) Color(0xFF6200EE) else MaterialTheme.colorScheme.surface,
+                shape = RoundedCornerShape(12.dp)
+            )
+            .border(
+                width = 2.dp,
+                color = if (isSelected) Color(0xFF6200EE) else Color(0xFF444444),
+                shape = RoundedCornerShape(12.dp)
+            )
+            .clickable(onClick = onClick)
+            .padding(horizontal = 20.dp, vertical = 12.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            text = label,
+            fontSize = 14.sp,
+            fontWeight = FontWeight.Medium,
+            color = if (isSelected) Color.White else MaterialTheme.colorScheme.onSurface
+        )
     }
 }
 
