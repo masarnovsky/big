@@ -6,7 +6,10 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -33,14 +36,13 @@ class FullscreenActivity : ComponentActivity() {
 
         val displayText = intent.getStringExtra("DISPLAY_TEXT") ?: "No text provided"
         val selectedFont = intent.getStringExtra("SELECTED_FONT") ?: "Default"
-        val selectedBackground = intent.getStringExtra("SELECTED_BACKGROUND") ?: "gradient"
-        val selectedOrientation = intent.getStringExtra("SELECTED_ORIENTATION") ?: "auto"
+        val selectedBackground = intent.getStringExtra("SELECTED_BACKGROUND") ?: "black"
+        val selectedOrientation = intent.getStringExtra("SELECTED_ORIENTATION") ?: "landscape"
 
         // Set orientation
         requestedOrientation = when (selectedOrientation) {
             "portrait" -> ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-            "landscape" -> ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-            else -> ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+            else -> ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
         }
 
         setContent {

@@ -21,10 +21,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val _selectedFont = MutableStateFlow("Poppins")
     val selectedFont: StateFlow<String> = _selectedFont.asStateFlow()
 
-    private val _selectedBackground = MutableStateFlow("gradient")
+    private val _selectedBackground = MutableStateFlow("black")
     val selectedBackground: StateFlow<String> = _selectedBackground.asStateFlow()
 
-    private val _selectedOrientation = MutableStateFlow("auto")
+    private val _selectedOrientation = MutableStateFlow("landscape")
     val selectedOrientation: StateFlow<String> = _selectedOrientation.asStateFlow()
 
     init {
