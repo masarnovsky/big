@@ -1,15 +1,17 @@
-package com.masarnovsky.big
+package com.masarnovsky.big.mvvm.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.masarnovsky.big.mvvm.model.TextDatabase
+import com.masarnovsky.big.mvvm.model.TextEntity
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
-    private val database = TextDatabase.getDatabase(application) // LLM: is it OK to do such things?
+    private val database = TextDatabase.Companion.getDatabase(application) // LLM: is it OK to do such things?
     private val dao = database.textDao()
 
     private val _inputText = MutableStateFlow("") // LLM: what is state flow?

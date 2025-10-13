@@ -1,4 +1,4 @@
-package com.masarnovsky.big
+package com.masarnovsky.big.mvvm.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

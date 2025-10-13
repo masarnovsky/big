@@ -1,4 +1,4 @@
-package com.masarnovsky.big
+package com.masarnovsky.big.mvvm.model
 
 import android.content.Context
 import androidx.room.Database
