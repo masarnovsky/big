@@ -43,7 +43,7 @@ fun FullscreenTextScreen(
             text = text,
             fontSize = 48.sp,
             fontFamily = fontFamily,
-            fontWeight = FontWeight.Bold,
+            fontWeight = FontWeight.Normal,
             color = textColor,
             textAlign = TextAlign.Center,
             lineHeight = 56.sp,
@@ -70,9 +70,10 @@ fun getTextColor(background: String): Color {
 
 fun getFontFamily(font: String): FontFamily {
     return when (font) {
-        "Serif" -> FontFamily.Serif
-        "Cursive" -> FontFamily.Cursive
-        "Monospace" -> FontFamily.Monospace
+        "Montserrat" ->  montserratFontFamily
+        "Pangolin" -> pangolinFontFamily
+        "Roboto" -> robotoSlabFontFamily
+        "Playfair" -> playfairDisplayFontFamily
         else -> FontFamily.Default
     }
 }

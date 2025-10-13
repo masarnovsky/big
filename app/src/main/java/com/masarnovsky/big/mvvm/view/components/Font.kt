@@ -19,10 +19,28 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.masarnovsky.big.R
+
+val montserratFontFamily = FontFamily(
+    Font(R.font.montserrat_black, FontWeight.Black)
+)
+
+val pangolinFontFamily = FontFamily(
+    Font(R.font.pangolin_regular, FontWeight.Normal)
+)
+
+val robotoSlabFontFamily = FontFamily(
+    Font(R.font.robotoslab_regular, FontWeight.Normal)
+)
+
+val playfairDisplayFontFamily = FontFamily(
+    Font(R.font.playfairdisplay_regular, FontWeight.Normal)
+)
 
 
 @Composable
@@ -31,10 +49,10 @@ fun FontSelector(
     onFontSelected: (String) -> Unit
 ) {
     val fonts = listOf(
-        "Default" to FontFamily.Default,
-        "Serif" to FontFamily.Serif,
-        "Cursive" to FontFamily.Cursive,
-        "Monospace" to FontFamily.Monospace
+        "Montserrat" to montserratFontFamily,
+        "Pangolin" to pangolinFontFamily,
+        "Roboto" to robotoSlabFontFamily,
+        "Playfair" to playfairDisplayFontFamily
     )
 
     LazyRow(
@@ -81,7 +99,7 @@ fun FontOption(
                 text = "Aa",
                 fontFamily = fontFamily,
                 fontSize = 24.sp,
-                fontWeight = FontWeight.Bold,
+                fontWeight = FontWeight.Bold, // FIXME: set defalut
                 color = if (isSelected) Color.White else MaterialTheme.colorScheme.onSurface
             )
             Spacer(modifier = Modifier.height(4.dp))
