@@ -36,19 +36,26 @@ fun FullscreenTextScreen(
             .fillMaxSize()
             .background(backgroundColor)
             .clickable { onExit() }
-            .padding(32.dp),
+//            .padding(32.dp)
+        ,
         contentAlignment = Alignment.Center
     ) {
-        Text(
+        AutoSizeTextOptimized(
             text = text,
-            fontSize = 48.sp,
-            fontFamily = fontFamily,
-            fontWeight = FontWeight.Normal,
             color = textColor,
-            textAlign = TextAlign.Center,
-            lineHeight = 56.sp,
-            modifier = Modifier.fillMaxWidth()
+            fontFamily = fontFamily,
+            modifier = Modifier.fillMaxSize()
         )
+//        Text(
+//            text = text,
+//            fontSize = 48.sp,
+//            fontFamily = fontFamily,
+//            fontWeight = FontWeight.Normal,
+//            color = textColor,
+//            textAlign = TextAlign.Center,
+//            lineHeight = 56.sp,
+//            modifier = Modifier.fillMaxWidth()
+//        )
     }
 }
 
