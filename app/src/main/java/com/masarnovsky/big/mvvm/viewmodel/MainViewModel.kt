@@ -11,10 +11,10 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
-    private val database = TextDatabase.Companion.getDatabase(application) // LLM: is it OK to do such things?
+    private val database = TextDatabase.Companion.getDatabase(application) // FIXME: move to correct layer (for test purposes!) - use chat https://claude.ai/chat/b6e0b0ec-ba9a-49d9-ac05-25b9d9f44af6
     private val dao = database.textDao()
 
-    private val _inputText = MutableStateFlow("") // LLM: what is state flow?
+    private val _inputText = MutableStateFlow("")
     val inputText: StateFlow<String> = _inputText.asStateFlow()
 
     private val _history = MutableStateFlow<List<TextEntity>>(emptyList())
@@ -65,9 +65,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun deleteText(id: Int) {
+    fun deleteText(entity: TextEntity) {
         viewModelScope.launch {
-            dao.delete(id)
+            dao.delete(entity)
         }
     }
 }

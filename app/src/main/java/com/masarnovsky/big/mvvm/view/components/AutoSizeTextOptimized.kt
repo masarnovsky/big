@@ -1,6 +1,5 @@
 package com.masarnovsky.big.mvvm.view.components
 
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.Text
@@ -24,7 +23,6 @@ fun AutoSizeTextOptimized(
     text: String,
     modifier: Modifier = Modifier,
     color: Color = Color.White,
-    maxLines: Int = Int.MAX_VALUE,
     fontFamily: FontFamily = FontFamily.Default,
     minFontSize: Float = 20f,
     maxFontSize: Float = 500f
@@ -34,17 +32,29 @@ fun AutoSizeTextOptimized(
     var maxSize by remember(text) { mutableStateOf(maxFontSize) }
     var readyToDraw by remember(text) { mutableStateOf(false) }
 
-    // Calculate max lines based on text length
-    val maxLines = remember(text) {
+    val (maxLines, softWrap) = remember(text) {
         when {
-            text.length <= 10 -> 1           // Very short: single line
-            text.length < 50 -> 2            // Short: 2 lines max
-            text.length < 150 -> 5           // Medium: 5 lines
-            else -> 10                       // Long: 10 lines
+            // Single word or very short - force single line
+            text.trim().split("\\s+".toRegex()).size == 1 && text.length <= 20 ->
+                Pair(1, false)
+
+            // Very short text - prefer single line
+            text.length <= 10 ->
+                Pair(1, false)
+
+            // Short text - allow minimal wrapping
+            text.length < 50 ->
+                Pair(2, true)
+
+            // Medium text
+            text.length < 150 ->
+                Pair(5, true)
+
+            // Long text
+            else ->
+                Pair(10, true)
         }
     }
-
-    val softWrap = text.length > 20
 
     Text(
         text = text,
@@ -55,10 +65,9 @@ fun AutoSizeTextOptimized(
         textAlign = TextAlign.Center,
         maxLines = maxLines,
         softWrap = softWrap,
-        lineHeight = (fontSizeValue * 1.1f).sp, // Tighter line spacing
+        lineHeight = (fontSizeValue * 1.1f).sp,
         modifier = modifier
-//            .fillMaxSize() // probably not needed
-            .padding(32.dp) // Safe margin from edges
+            .padding(32.dp)
             .wrapContentSize(Alignment.Center),
         onTextLayout = { textLayoutResult ->
             val overflow = textLayoutResult.didOverflowWidth ||

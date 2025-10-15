@@ -10,7 +10,7 @@ abstract class TextDatabase : RoomDatabase() {
     abstract fun textDao(): TextDao
 
     companion object {
-        @Volatile // LLM: what volatile do?
+        @Volatile
         private var INSTANCE: TextDatabase? = null
 
         fun getDatabase(context: Context): TextDatabase {

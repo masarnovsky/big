@@ -4,9 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -14,10 +11,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import kotlin.random.Random
 
 @Composable
@@ -35,9 +28,7 @@ fun FullscreenTextScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(backgroundColor)
-            .clickable { onExit() }
-//            .padding(32.dp)
-        ,
+            .clickable { onExit() },
         contentAlignment = Alignment.Center
     ) {
         AutoSizeTextOptimized(
@@ -46,16 +37,6 @@ fun FullscreenTextScreen(
             fontFamily = fontFamily,
             modifier = Modifier.fillMaxSize()
         )
-//        Text(
-//            text = text,
-//            fontSize = 48.sp,
-//            fontFamily = fontFamily,
-//            fontWeight = FontWeight.Normal,
-//            color = textColor,
-//            textAlign = TextAlign.Center,
-//            lineHeight = 56.sp,
-//            modifier = Modifier.fillMaxWidth()
-//        )
     }
 }
 

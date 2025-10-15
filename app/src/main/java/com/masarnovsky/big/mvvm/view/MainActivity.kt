@@ -203,7 +203,7 @@ fun MainScreen(
                     HistoryItem(
                         text = item.text,
                         timestamp = item.timestamp,
-                        onDelete = { viewModel.deleteText(item.id) },
+                        onDelete = { viewModel.deleteText(item) },
                         onClick = {
                             onShowFullscreen(
                                 item.text,
