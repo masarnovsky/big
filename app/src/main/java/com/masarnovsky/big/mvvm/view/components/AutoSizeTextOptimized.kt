@@ -27,7 +27,7 @@ fun AutoSizeTextOptimized(
     maxLines: Int = Int.MAX_VALUE,
     fontFamily: FontFamily = FontFamily.Default,
     minFontSize: Float = 20f,
-    maxFontSize: Float = 300f
+    maxFontSize: Float = 500f
 ) {
     var fontSizeValue by remember(text) { mutableStateOf(maxFontSize) }
     var minSize by remember(text) { mutableStateOf(minFontSize) }
@@ -37,11 +37,14 @@ fun AutoSizeTextOptimized(
     // Calculate max lines based on text length
     val maxLines = remember(text) {
         when {
-            text.length < 50 -> 3
-            text.length < 200 -> 8
-            else -> 15
+            text.length <= 10 -> 1           // Very short: single line
+            text.length < 50 -> 2            // Short: 2 lines max
+            text.length < 150 -> 5           // Medium: 5 lines
+            else -> 10                       // Long: 10 lines
         }
     }
+
+    val softWrap = text.length > 20
 
     Text(
         text = text,
@@ -51,10 +54,11 @@ fun AutoSizeTextOptimized(
         fontWeight = FontWeight.Bold,
         textAlign = TextAlign.Center,
         maxLines = maxLines,
-        lineHeight = (fontSizeValue * 1.2f).sp, // Tighter line spacing
+        softWrap = softWrap,
+        lineHeight = (fontSizeValue * 1.1f).sp, // Tighter line spacing
         modifier = modifier
 //            .fillMaxSize() // probably not needed
-            .padding(24.dp) // Safe margin from edges
+            .padding(32.dp) // Safe margin from edges
             .wrapContentSize(Alignment.Center),
         onTextLayout = { textLayoutResult ->
             val overflow = textLayoutResult.didOverflowWidth ||

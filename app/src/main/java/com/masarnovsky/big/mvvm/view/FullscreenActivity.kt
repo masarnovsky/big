@@ -4,7 +4,6 @@ import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
@@ -14,13 +13,11 @@ class FullscreenActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        enableEdgeToEdge()
-
         // Enable fullscreen mode
         setupFullscreen()
 
         val displayText = intent.getStringExtra("DISPLAY_TEXT") ?: "No text provided"
-        val selectedFont = intent.getStringExtra("SELECTED_FONT") ?: "Default"
+        val selectedFont = intent.getStringExtra("SELECTED_FONT") ?: "Montserrat"
         val selectedBackground = intent.getStringExtra("SELECTED_BACKGROUND") ?: "black"
         val selectedOrientation = intent.getStringExtra("SELECTED_ORIENTATION") ?: "landscape"
 
