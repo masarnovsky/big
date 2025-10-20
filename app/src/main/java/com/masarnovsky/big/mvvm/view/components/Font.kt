@@ -80,12 +80,12 @@ fun FontOption(
         modifier = Modifier
             .size(80.dp)
             .background(
-                color = if (isSelected) Color(0xFF6200EE) else MaterialTheme.colorScheme.surface,
+                color = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.tertiary,
                 shape = RoundedCornerShape(12.dp)
             )
             .border(
                 width = 2.dp,
-                color = if (isSelected) Color(0xFF6200EE) else Color(0xFF444444),
+                color = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary,
                 shape = RoundedCornerShape(12.dp)
             )
             .clickable(onClick = onClick)

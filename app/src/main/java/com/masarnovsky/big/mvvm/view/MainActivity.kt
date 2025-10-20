@@ -23,12 +23,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -38,6 +36,11 @@ import com.masarnovsky.big.mvvm.view.components.FontSelector
 import com.masarnovsky.big.mvvm.view.components.HistoryItem
 import com.masarnovsky.big.mvvm.view.components.OrientationSelector
 import com.masarnovsky.big.mvvm.viewmodel.MainViewModel
+import com.masarnovsky.big.ui.theme.ArcticMinimal
+import com.masarnovsky.big.ui.theme.ForestNight
+import com.masarnovsky.big.ui.theme.MidnightSlate
+import com.masarnovsky.big.ui.theme.MonochromePro
+import com.masarnovsky.big.ui.theme.WarmCharcoal
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,12 +68,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun FullscreenTextTheme(content: @Composable () -> Unit) {
     MaterialTheme(
-        colorScheme = darkColorScheme(
-            primary = Color(0xFF6200EE),
-            secondary = Color(0xFF03DAC6),
-            background = Color(0xFF121212),
-            surface = Color(0xFF1E1E1E)
-        ),
+        colorScheme = MonochromePro,
         content = content
     )
 }
@@ -177,7 +175,8 @@ fun MainScreen(
                 enabled = inputText.isNotBlank(),
                 shape = RoundedCornerShape(12.dp),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFF6200EE)
+                    containerColor = MaterialTheme.colorScheme.secondary,
+                    contentColor = MaterialTheme.colorScheme.primary
                 )
             ) {
                 Text(

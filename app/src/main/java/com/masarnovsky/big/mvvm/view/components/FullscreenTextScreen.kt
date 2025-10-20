@@ -109,6 +109,25 @@ fun getRandomGradient(): Brush {
                 Color(0xFFF44336),
                 Color(0xFF9C27B0)
             )
+        ),
+        //https://coolors.co/gradients
+        Brush.verticalGradient(
+            colors = listOf(
+                Color(0xFF42047e),
+                Color(0xFF07f49e)
+            )
+        ),
+        Brush.verticalGradient(
+            colors = listOf(
+                Color(0xFFf4f269),
+                Color(0xFF5cb270)
+            )
+        ),
+        Brush.verticalGradient(
+            colors = listOf(
+                Color(0xFFffb88e),
+                Color(0xFFea5753)
+            )
         )
     )
 

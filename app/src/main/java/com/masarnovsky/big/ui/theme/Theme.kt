@@ -1,57 +1,54 @@
 package com.masarnovsky.big.ui.theme
 
-import android.os.Build
-import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.dynamicDarkColorScheme
-import androidx.compose.material3.dynamicLightColorScheme
-import androidx.compose.material3.lightColorScheme
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.graphics.Color
 
-private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
+// Theme 1: "Midnight Slate" (Calm Blue-Gray)
+val MidnightSlate = darkColorScheme(
+    background = Color(0xFF0D1117),        // Deep blue-black
+    primary = Color(0xFF58A6FF),           // Soft blue (accent)
+    secondary = Color(0xFF6E7681),         // Gray (inactive)
+    tertiary = Color(0xFF161B22),          // History items background
+    onBackground = Color(0xFFE6EDF3),      // Off-white (text)
+    error = Color(0xFFDA6962)              // Muted red (delete)
 )
 
-private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
-
-    /* Other default colors to override
-    background = Color(0xFFFFFBFE),
-    surface = Color(0xFFFFFBFE),
-    onPrimary = Color.White,
-    onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-    */
+// Theme 2: "Forest Night" (Calm Green)
+val ForestNight = darkColorScheme(
+    background = Color(0xFF0D1B0D),        // Dark green-black
+    primary = Color(0xFF5FB573),           // Soft green (accent)
+    secondary = Color(0xFF3D4A3D),         // Dark gray-green (inactive)
+    tertiary = Color(0xFF1A2A1A),          // History items background
+    onBackground = Color(0xFFE8F2E8),      // Light green-white (text)
+    error = Color(0xFFD97373)              // Soft red (delete)
 )
 
-@Composable
-fun BigTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
-    content: @Composable () -> Unit
-) {
-    val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-        }
+// Theme 3: "Warm Charcoal" (Calm Orange)
+val WarmCharcoal = darkColorScheme(
+    background = Color(0xFF1A1512),        // Warm dark brown
+    primary = Color(0xFFE89A5D),           // Soft orange (accent)
+    secondary = Color(0xFF4A4239),         // Warm gray (inactive)
+    tertiary = Color(0xFF252017),          // History items background
+    onBackground = Color(0xFFF5EDE5),      // Warm white (text)
+    error = Color(0xFFD97373)              // Soft red (delete)
+)
 
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
-    }
+// Theme 4: "Arctic Minimal" (Calm Purple)
+val ArcticMinimal = darkColorScheme(
+    background = Color(0xFF0F0F14),        // Cool dark purple-black
+    primary = Color(0xFF9D8FE8),           // Soft lavender (accent)
+    secondary = Color(0xFF3C3C47),         // Cool gray (inactive)
+    tertiary = Color(0xFF1A1A22),          // History items background
+    onBackground = Color(0xFFEFEDF5),      // Cool white (text)
+    error = Color(0xFFDA6962)              // Muted red (delete)
+)
 
-    MaterialTheme(
-        colorScheme = colorScheme,
-        typography = Typography,
-        content = content
-    )
-}
+// Theme 5: "Monochrome Pro" (Pure Minimal)
+val MonochromePro = darkColorScheme(
+    background = Color(0xFF0A0A0A),        // Pure black
+    primary = Color(0xFF9E9E9E),           // Medium gray (accent)
+    secondary = Color(0xFF2C2C2C),         // Dark gray (inactive)
+    tertiary = Color(0xFF1A1A1A),          // History items background
+    onBackground = Color(0xFFE0E0E0),      // Light gray (text)
+    error = Color(0xFFB85C5C)              // Deep red (delete)
+)
