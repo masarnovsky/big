@@ -20,13 +20,13 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val _history = MutableStateFlow<List<TextEntity>>(emptyList())
     val history: StateFlow<List<TextEntity>> = _history.asStateFlow()
 
-    private val _selectedFont = MutableStateFlow("Poppins")
+    private val _selectedFont = MutableStateFlow(defaultFont)
     val selectedFont: StateFlow<String> = _selectedFont.asStateFlow()
 
-    private val _selectedBackground = MutableStateFlow("black")
+    private val _selectedBackground = MutableStateFlow(defaultBackgroundColor)
     val selectedBackground: StateFlow<String> = _selectedBackground.asStateFlow()
 
-    private val _selectedOrientation = MutableStateFlow("landscape")
+    private val _selectedOrientation = MutableStateFlow(defaultOrientation)
     val selectedOrientation: StateFlow<String> = _selectedOrientation.asStateFlow()
 
     init {

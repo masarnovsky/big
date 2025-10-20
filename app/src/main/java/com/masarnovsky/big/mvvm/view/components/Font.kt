@@ -99,7 +99,6 @@ fun FontOption(
                 text = "Aa",
                 fontFamily = fontFamily,
                 fontSize = 24.sp,
-                fontWeight = FontWeight.Bold, // FIXME: set defalut
                 color = if (isSelected) Color.White else MaterialTheme.colorScheme.onSurface
             )
             Spacer(modifier = Modifier.height(4.dp))

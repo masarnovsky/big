@@ -37,7 +37,6 @@ fun BackgroundSelector(
         backgrounds.forEach { (value, label) ->
             BackgroundOption(
                 label = label,
-                value = value,
                 isSelected = selectedBackground == value,
                 onClick = { onBackgroundSelected(value) }
             )
@@ -48,7 +47,6 @@ fun BackgroundSelector(
 @Composable
 fun BackgroundOption(
     label: String,
-    value: String,
     isSelected: Boolean,
     onClick: () -> Unit
 ) {

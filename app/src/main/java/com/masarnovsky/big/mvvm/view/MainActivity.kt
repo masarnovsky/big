@@ -36,11 +36,7 @@ import com.masarnovsky.big.mvvm.view.components.FontSelector
 import com.masarnovsky.big.mvvm.view.components.HistoryItem
 import com.masarnovsky.big.mvvm.view.components.OrientationSelector
 import com.masarnovsky.big.mvvm.viewmodel.MainViewModel
-import com.masarnovsky.big.ui.theme.ArcticMinimal
 import com.masarnovsky.big.ui.theme.ForestNight
-import com.masarnovsky.big.ui.theme.MidnightSlate
-import com.masarnovsky.big.ui.theme.MonochromePro
-import com.masarnovsky.big.ui.theme.WarmCharcoal
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,7 +64,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun FullscreenTextTheme(content: @Composable () -> Unit) {
     MaterialTheme(
-        colorScheme = MonochromePro,
+        colorScheme = ForestNight,
         content = content
     )
 }
@@ -175,8 +171,8 @@ fun MainScreen(
                 enabled = inputText.isNotBlank(),
                 shape = RoundedCornerShape(12.dp),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.secondary,
-                    contentColor = MaterialTheme.colorScheme.primary
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.background
                 )
             ) {
                 Text(
