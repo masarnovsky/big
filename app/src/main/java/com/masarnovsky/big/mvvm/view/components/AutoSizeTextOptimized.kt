@@ -61,7 +61,7 @@ fun AutoSizeTextOptimized(
         color = if (readyToDraw) color else Color.Transparent,
         fontSize = fontSizeValue.sp,
         fontFamily = fontFamily,
-        fontWeight = FontWeight.Bold,
+        fontWeight = FontWeight.Bold, // FIXME: delete this one?
         textAlign = TextAlign.Center,
         maxLines = maxLines,
         softWrap = softWrap,

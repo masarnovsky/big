@@ -35,7 +35,11 @@ import com.masarnovsky.big.mvvm.view.components.BackgroundSelector
 import com.masarnovsky.big.mvvm.view.components.FontSelector
 import com.masarnovsky.big.mvvm.view.components.HistoryItem
 import com.masarnovsky.big.mvvm.view.components.OrientationSelector
+import com.masarnovsky.big.mvvm.view.components.getFontFamily
 import com.masarnovsky.big.mvvm.viewmodel.MainViewModel
+import com.masarnovsky.big.mvvm.viewmodel.ellipsis
+import com.masarnovsky.big.mvvm.viewmodel.maxAmountOfSymbolsOnShowButton
+import com.masarnovsky.big.mvvm.viewmodel.space
 import com.masarnovsky.big.ui.theme.ForestNight
 
 class MainActivity : ComponentActivity() {
@@ -176,9 +180,14 @@ fun MainScreen(
                 )
             ) {
                 Text(
-                    "Show Fullscreen",
+                    "Show",
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold
+                )
+                Text(
+                    formatFullscreenText(viewModel.inputText.collectAsState().value),
+                    fontSize = 18.sp,
+                    fontFamily = getFontFamily(viewModel.selectedFont.collectAsState().value)
                 )
             }
 
@@ -215,5 +224,13 @@ fun MainScreen(
                 }
             }
         }
+    }
+}
+
+private fun formatFullscreenText(text: String) : String {
+    return when {
+        text.length > maxAmountOfSymbolsOnShowButton -> space + text.take(maxAmountOfSymbolsOnShowButton) + ellipsis
+        text.isNotEmpty() -> space + text
+        else -> ""
     }
 }

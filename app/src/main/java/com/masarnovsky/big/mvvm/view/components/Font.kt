@@ -42,6 +42,16 @@ val playfairDisplayFontFamily = FontFamily(
     Font(R.font.playfairdisplay_regular, FontWeight.Normal)
 )
 
+fun getFontFamily(font: String): FontFamily {
+    return when (font) {
+        "Montserrat" ->  montserratFontFamily
+        "Pangolin" -> pangolinFontFamily
+        "Roboto" -> robotoSlabFontFamily
+        "Playfair" -> playfairDisplayFontFamily
+        else -> FontFamily.Default
+    }
+}
+
 
 @Composable
 fun FontSelector(

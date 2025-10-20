@@ -10,7 +10,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontFamily
 import kotlin.random.Random
 
 @Composable
@@ -37,32 +36,6 @@ fun FullscreenTextScreen(
             fontFamily = fontFamily,
             modifier = Modifier.fillMaxSize()
         )
-    }
-}
-
-fun getBackgroundColor(background: String): Brush {
-    return when (background) {
-        "black" -> Brush.linearGradient(listOf(Color.Black, Color.Black))
-        "white" -> Brush.linearGradient(listOf(Color.White, Color.White))
-        else -> getRandomGradient()
-    }
-}
-
-fun getTextColor(background: String): Color {
-    return when (background) {
-        "black" -> Color.White
-        "white" -> Color.Black
-        else -> Color.White
-    }
-}
-
-fun getFontFamily(font: String): FontFamily {
-    return when (font) {
-        "Montserrat" ->  montserratFontFamily
-        "Pangolin" -> pangolinFontFamily
-        "Roboto" -> robotoSlabFontFamily
-        "Playfair" -> playfairDisplayFontFamily
-        else -> FontFamily.Default
     }
 }
 
