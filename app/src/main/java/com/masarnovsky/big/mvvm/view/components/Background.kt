@@ -90,3 +90,11 @@ fun BackgroundOption(
         )
     }
 }
+
+//fun getContrastTextColor(background: BackgroundType): Color {
+//    return when (background) {
+//        BackgroundType.Black -> Color(0xFFE5E5E5)
+//        BackgroundType.White -> Color(0xFF2C2C2C)
+//        BackgroundType.Gradient -> Color.White // Gradients are bright
+//    }
+//}

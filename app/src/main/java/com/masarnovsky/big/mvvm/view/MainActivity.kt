@@ -40,7 +40,7 @@ import com.masarnovsky.big.mvvm.viewmodel.MainViewModel
 import com.masarnovsky.big.mvvm.viewmodel.ellipsis
 import com.masarnovsky.big.mvvm.viewmodel.maxAmountOfSymbolsOnShowButton
 import com.masarnovsky.big.mvvm.viewmodel.space
-import com.masarnovsky.big.ui.theme.ForestNight
+import com.masarnovsky.big.ui.theme.monochromeLight
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,7 +68,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun FullscreenTextTheme(content: @Composable () -> Unit) {
     MaterialTheme(
-        colorScheme = ForestNight,
+        colorScheme = monochromeLight,
         content = content
     )
 }
