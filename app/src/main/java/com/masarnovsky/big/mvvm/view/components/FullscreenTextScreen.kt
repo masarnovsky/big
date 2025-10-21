@@ -17,7 +17,7 @@ fun FullscreenTextScreen(
     text: String,
     font: String,
     background: String,
-    onExit: () -> Unit
+    onExit: () -> Unit // ask: why i need to pass params - reusability? but params get from the state
 ) {
     val backgroundColor = remember(background) { getBackgroundColor(background) }
     val textColor = remember(background) { getTextColor(background) }

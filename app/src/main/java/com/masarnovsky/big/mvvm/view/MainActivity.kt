@@ -35,6 +35,7 @@ import com.masarnovsky.big.mvvm.view.components.BackgroundSelector
 import com.masarnovsky.big.mvvm.view.components.FontSelector
 import com.masarnovsky.big.mvvm.view.components.HistoryItem
 import com.masarnovsky.big.mvvm.view.components.OrientationSelector
+import com.masarnovsky.big.mvvm.view.components.PreviewButton
 import com.masarnovsky.big.mvvm.view.components.getFontFamily
 import com.masarnovsky.big.mvvm.viewmodel.MainViewModel
 import com.masarnovsky.big.mvvm.viewmodel.ellipsis
@@ -52,7 +53,7 @@ class MainActivity : ComponentActivity() {
             FullscreenTextTheme {
                 MainScreen(
                     onShowFullscreen = { text, font, background, orientation ->
-                        val intent = Intent(this, FullscreenActivity::class.java)
+                        val intent = Intent(this, FullscreenActivity::class.java) // ask: what is Intent?
                         intent.putExtra("DISPLAY_TEXT", text)
                         intent.putExtra("SELECTED_FONT", font)
                         intent.putExtra("SELECTED_BACKGROUND", background)
@@ -66,7 +67,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun FullscreenTextTheme(content: @Composable () -> Unit) {
+fun FullscreenTextTheme(content: @Composable () -> Unit) { // ask: what is that structure?
     MaterialTheme(
         colorScheme = monochromeLight,
         content = content
@@ -156,6 +157,26 @@ fun MainScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             // Show Button
+            PreviewButton(
+                text = inputText,
+                font = selectedFont,
+                background = selectedBackground,
+                orientation = selectedOrientation,
+                onShowFullscreen = {
+                    viewModel.saveText(inputText)
+                    onShowFullscreen(
+                        inputText,
+                        selectedFont,
+                        selectedBackground,
+                        selectedOrientation
+                    )
+                    viewModel.updateInputText("")
+                },
+                enabled = inputText.isNotBlank()
+            )
+
+            Spacer(modifier = Modifier.height(24.dp))
+
             Button(
                 onClick = {
                     if (inputText.isNotBlank()) {
