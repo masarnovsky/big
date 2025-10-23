@@ -1,8 +1,11 @@
 package com.masarnovsky.big.mvvm.viewmodel
 
+import com.masarnovsky.big.mvvm.BackgroundColor
+import com.masarnovsky.big.mvvm.Orientation
+
 const val defaultFont = "Montserrat"
-const val defaultBackgroundColor = "black"
-const val defaultOrientation = "landscape"
+val defaultBackgroundColor = BackgroundColor.BLACK
+val defaultOrientation = Orientation.LANDSCAPE
 
 const val space = " "
 

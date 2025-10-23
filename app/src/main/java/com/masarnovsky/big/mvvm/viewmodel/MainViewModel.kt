@@ -3,6 +3,10 @@ package com.masarnovsky.big.mvvm.viewmodel
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.masarnovsky.big.getRandomGradient
+import com.masarnovsky.big.mvvm.BackgroundColor
+import com.masarnovsky.big.mvvm.GradientColor
+import com.masarnovsky.big.mvvm.Orientation
 import com.masarnovsky.big.mvvm.model.TextDatabase
 import com.masarnovsky.big.mvvm.model.TextEntity
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -11,7 +15,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
-    private val database = TextDatabase.Companion.getDatabase(application) // FIXME: move to correct layer (for test purposes!) - use chat https://claude.ai/chat/b6e0b0ec-ba9a-49d9-ac05-25b9d9f44af6
+    private val database =
+        TextDatabase.Companion.getDatabase(application) // FIXME: move to correct layer (for test purposes!) - use chat https://claude.ai/chat/b6e0b0ec-ba9a-49d9-ac05-25b9d9f44af6
     private val dao = database.textDao()
 
     private val _inputText = MutableStateFlow("")
@@ -24,10 +29,14 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     val selectedFont: StateFlow<String> = _selectedFont.asStateFlow()
 
     private val _selectedBackground = MutableStateFlow(defaultBackgroundColor)
-    val selectedBackground: StateFlow<String> = _selectedBackground.asStateFlow()
+    val selectedBackground: StateFlow<BackgroundColor> = _selectedBackground.asStateFlow()
+
+    private val _selectedGradient =
+        MutableStateFlow(getRandomGradient()) // ask: what is this construction?
+    val selectedGradient: StateFlow<GradientColor> = _selectedGradient.asStateFlow()
 
     private val _selectedOrientation = MutableStateFlow(defaultOrientation)
-    val selectedOrientation: StateFlow<String> = _selectedOrientation.asStateFlow()
+    val selectedOrientation: StateFlow<Orientation> = _selectedOrientation.asStateFlow()
 
     init {
         loadHistory()
@@ -49,11 +58,15 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         _selectedFont.value = font
     }
 
-    fun updateBackground(background: String) {
+    fun updateBackground(background: BackgroundColor) {
         _selectedBackground.value = background
+
+        if (BackgroundColor.GRADIENT == background) {
+            _selectedGradient.value = getRandomGradient()
+        }
     }
 
-    fun updateOrientation(orientation: String) {
+    fun updateOrientation(orientation: Orientation) {
         _selectedOrientation.value = orientation
     }
 

@@ -18,16 +18,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.masarnovsky.big.mvvm.Orientation
 
 @Composable
 fun OrientationSelector(
-    selectedOrientation: String,
-    onOrientationSelected: (String) -> Unit
+    selectedOrientation: Orientation,
+    onOrientationSelected: (Orientation) -> Unit
 ) {
-    val orientations = listOf(
-        "landscape" to "Landscape",
-        "portrait" to "Portrait"
-    )
+    val orientations = Orientation.entries.map { Pair(it, it.label) }
 
     Row(
         horizontalArrangement = Arrangement.spacedBy(12.dp)
@@ -35,7 +33,6 @@ fun OrientationSelector(
         orientations.forEach { (value, label) ->
             OrientationOption(
                 label = label,
-                value = value,
                 isSelected = selectedOrientation == value,
                 onClick = { onOrientationSelected(value) }
             )
@@ -46,7 +43,6 @@ fun OrientationSelector(
 @Composable
 fun OrientationOption(
     label: String,
-    value: String,
     isSelected: Boolean,
     onClick: () -> Unit
 ) {

@@ -31,6 +31,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.masarnovsky.big.mvvm.BackgroundColor
+import com.masarnovsky.big.mvvm.GradientColor
+import com.masarnovsky.big.mvvm.Orientation
 import com.masarnovsky.big.mvvm.view.components.BackgroundSelector
 import com.masarnovsky.big.mvvm.view.components.FontSelector
 import com.masarnovsky.big.mvvm.view.components.HistoryItem
@@ -52,12 +55,14 @@ class MainActivity : ComponentActivity() {
         setContent {
             FullscreenTextTheme {
                 MainScreen(
-                    onShowFullscreen = { text, font, background, orientation ->
-                        val intent = Intent(this, FullscreenActivity::class.java) // ask: what is Intent?
+                    onShowFullscreen = { text, font, background, gradient, orientation ->
+                        val intent =
+                            Intent(this, FullscreenActivity::class.java) // ask: what is Intent?
                         intent.putExtra("DISPLAY_TEXT", text)
                         intent.putExtra("SELECTED_FONT", font)
-                        intent.putExtra("SELECTED_BACKGROUND", background)
-                        intent.putExtra("SELECTED_ORIENTATION", orientation)
+                        intent.putExtra("SELECTED_BACKGROUND", background.name)
+                        intent.putExtra("SELECTED_ORIENTATION", orientation.name)
+                        intent.putExtra("SELECTED_GRADIENT", gradient.name)
                         startActivity(intent)
                     }
                 )
@@ -78,12 +83,13 @@ fun FullscreenTextTheme(content: @Composable () -> Unit) { // ask: what is that 
 @Composable
 fun MainScreen(
     viewModel: MainViewModel = viewModel(),
-    onShowFullscreen: (String, String, String, String) -> Unit
+    onShowFullscreen: (String, String, BackgroundColor, GradientColor, Orientation) -> Unit
 ) {
     val inputText by viewModel.inputText.collectAsState()
     val history by viewModel.history.collectAsState()
     val selectedFont by viewModel.selectedFont.collectAsState()
     val selectedBackground by viewModel.selectedBackground.collectAsState()
+    val selectedGradient by viewModel.selectedGradient.collectAsState()
     val selectedOrientation by viewModel.selectedOrientation.collectAsState()
 
     Scaffold { padding ->
@@ -94,7 +100,6 @@ fun MainScreen(
                 .background(MaterialTheme.colorScheme.background)
                 .padding(16.dp)
         ) {
-            // Input Section
             OutlinedTextField(
                 value = inputText,
                 onValueChange = { viewModel.updateInputText(it) },
@@ -108,7 +113,6 @@ fun MainScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Font Selector
             Text(
                 "Font Style",
                 fontSize = 14.sp,
@@ -124,7 +128,6 @@ fun MainScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Background Selector
             Text(
                 "Background",
                 fontSize = 14.sp,
@@ -140,7 +143,6 @@ fun MainScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Orientation Selector
             Text(
                 "Orientation",
                 fontSize = 14.sp,
@@ -156,11 +158,11 @@ fun MainScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Show Button
             PreviewButton(
                 text = inputText,
                 font = selectedFont,
                 background = selectedBackground,
+                gradient = selectedGradient,
                 orientation = selectedOrientation,
                 onShowFullscreen = {
                     viewModel.saveText(inputText)
@@ -168,6 +170,7 @@ fun MainScreen(
                         inputText,
                         selectedFont,
                         selectedBackground,
+                        selectedGradient,
                         selectedOrientation
                     )
                     viewModel.updateInputText("")
@@ -185,6 +188,7 @@ fun MainScreen(
                             inputText,
                             selectedFont,
                             selectedBackground,
+                            selectedGradient,
                             selectedOrientation
                         )
                         viewModel.updateInputText("")
@@ -214,7 +218,6 @@ fun MainScreen(
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // History Section
             Text(
                 "History",
                 fontSize = 20.sp,
@@ -238,6 +241,7 @@ fun MainScreen(
                                 item.text,
                                 selectedFont,
                                 selectedBackground,
+                                selectedGradient,
                                 selectedOrientation
                             )
                         }
@@ -248,9 +252,12 @@ fun MainScreen(
     }
 }
 
-private fun formatFullscreenText(text: String) : String {
+private fun formatFullscreenText(text: String): String {
     return when {
-        text.length > maxAmountOfSymbolsOnShowButton -> space + text.take(maxAmountOfSymbolsOnShowButton) + ellipsis
+        text.length > maxAmountOfSymbolsOnShowButton -> space + text.take(
+            maxAmountOfSymbolsOnShowButton
+        ) + ellipsis
+
         text.isNotEmpty() -> space + text
         else -> ""
     }

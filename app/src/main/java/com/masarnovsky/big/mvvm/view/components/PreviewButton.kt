@@ -12,14 +12,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.masarnovsky.big.getBackgroundColor
+import com.masarnovsky.big.getTextColor
+import com.masarnovsky.big.mvvm.BackgroundColor
+import com.masarnovsky.big.mvvm.GradientColor
+import com.masarnovsky.big.mvvm.Orientation
 import com.masarnovsky.big.mvvm.viewmodel.ellipsis
 import com.masarnovsky.big.mvvm.viewmodel.maxAmountOfSymbolsOnShowButton
 import com.masarnovsky.big.mvvm.viewmodel.space
@@ -28,8 +30,9 @@ import com.masarnovsky.big.mvvm.viewmodel.space
 fun PreviewButton(
     text: String,
     font: String,
-    background: String,
-    orientation: String,
+    background: BackgroundColor,
+    gradient: GradientColor,
+    orientation: Orientation,
     onShowFullscreen: () -> Unit,
     enabled: Boolean
 ) {
@@ -38,18 +41,8 @@ fun PreviewButton(
             .fillMaxWidth()
             .height(56.dp)
             .clip(RoundedCornerShape(12.dp))
-            .background(
-                brush = when (background) {
-                    "gradient" -> Brush.linearGradient(
-                        colors = listOf(
-                            Color(0xFF667eea),
-                            Color(0xFF764ba2),
-                            Color(0xFFf093fb)
-                        )
-                    )
-                    "white" -> SolidColor(Color.White)
-                    else -> SolidColor(Color.Black)
-                }
+            .background( // setup not enabled condition
+                brush = getBackgroundColor(background, gradient, enabled)
             )
             .clickable(enabled = enabled) { onShowFullscreen() }
             .padding(16.dp),
@@ -60,7 +53,7 @@ fun PreviewButton(
             fontSize = 18.sp,
             fontFamily = getFontFamily(font),
             fontWeight = FontWeight.Bold,
-            color = if (background == "white") Color.Black else Color.White,
+            color = getTextColor(background, enabled),
             textAlign = TextAlign.Center,
             maxLines = 3,
             overflow = TextOverflow.Ellipsis
@@ -68,10 +61,10 @@ fun PreviewButton(
     }
 }
 
-private fun formatFullscreenText(text: String) : String {
+private fun formatFullscreenText(text: String): String {
     return when {
         text.length > maxAmountOfSymbolsOnShowButton -> space + text.take(maxAmountOfSymbolsOnShowButton) + ellipsis
         text.isNotEmpty() -> space + text
-        else -> "this is the preview"
+        else -> "input text to show"
     }
 }

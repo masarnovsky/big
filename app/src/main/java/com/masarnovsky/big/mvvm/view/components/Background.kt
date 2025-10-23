@@ -14,38 +14,19 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.masarnovsky.big.mvvm.BackgroundColor
 
-fun getBackgroundColor(background: String): Brush {
-    return when (background) {
-        "black" -> Brush.linearGradient(listOf(Color.Black, Color.Black))
-        "white" -> Brush.linearGradient(listOf(Color.White, Color.White))
-        else -> getRandomGradient()
-    }
-}
-
-fun getTextColor(background: String): Color {
-    return when (background) {
-        "black" -> Color.White
-        "white" -> Color.Black
-        else -> Color.White
-    }
-}
 
 @Composable
 fun BackgroundSelector(
-    selectedBackground: String,
-    onBackgroundSelected: (String) -> Unit
+    selectedBackground: BackgroundColor,
+    onBackgroundSelected: (BackgroundColor) -> Unit
 ) {
-    val backgrounds = listOf(
-        "black" to "Black",
-        "white" to "White",
-        "gradient" to "Gradient"
-    )
+    val backgrounds = BackgroundColor.entries.map { Pair(it, it.label) }
 
     Row(
         horizontalArrangement = Arrangement.spacedBy(12.dp)
@@ -90,11 +71,3 @@ fun BackgroundOption(
         )
     }
 }
-
-//fun getContrastTextColor(background: BackgroundType): Color {
-//    return when (background) {
-//        BackgroundType.Black -> Color(0xFFE5E5E5)
-//        BackgroundType.White -> Color(0xFF2C2C2C)
-//        BackgroundType.Gradient -> Color.White // Gradients are bright
-//    }
-//}
