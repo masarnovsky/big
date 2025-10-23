@@ -5,6 +5,7 @@ import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -30,7 +31,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.masarnovsky.big.mvvm.BackgroundColor
 import com.masarnovsky.big.mvvm.GradientColor
 import com.masarnovsky.big.mvvm.Orientation
@@ -47,6 +47,8 @@ import com.masarnovsky.big.mvvm.viewmodel.space
 import com.masarnovsky.big.ui.theme.monochromeLight
 
 class MainActivity : ComponentActivity() {
+    private val viewModel: MainViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -55,9 +57,10 @@ class MainActivity : ComponentActivity() {
         setContent {
             FullscreenTextTheme {
                 MainScreen(
+                    viewModel,
                     onShowFullscreen = { text, font, background, gradient, orientation ->
                         val intent =
-                            Intent(this, FullscreenActivity::class.java) // ask: what is Intent?
+                            Intent(this, FullscreenActivity::class.java)
                         intent.putExtra("DISPLAY_TEXT", text)
                         intent.putExtra("SELECTED_FONT", font)
                         intent.putExtra("SELECTED_BACKGROUND", background.name)
@@ -68,6 +71,11 @@ class MainActivity : ComponentActivity() {
                 )
             }
         }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        viewModel.updateInputText("")
     }
 }
 
@@ -82,7 +90,7 @@ fun FullscreenTextTheme(content: @Composable () -> Unit) { // ask: what is that 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(
-    viewModel: MainViewModel = viewModel(),
+    viewModel: MainViewModel,
     onShowFullscreen: (String, String, BackgroundColor, GradientColor, Orientation) -> Unit
 ) {
     val inputText by viewModel.inputText.collectAsState()
@@ -173,7 +181,6 @@ fun MainScreen(
                         selectedGradient,
                         selectedOrientation
                     )
-                    viewModel.updateInputText("")
                 },
                 enabled = inputText.isNotBlank()
             )
