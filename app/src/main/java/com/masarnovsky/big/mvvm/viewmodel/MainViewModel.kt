@@ -3,8 +3,9 @@ package com.masarnovsky.big.mvvm.viewmodel
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.masarnovsky.big.getRandomGradient
+import com.masarnovsky.big.mvvm.getRandomGradient
 import com.masarnovsky.big.mvvm.BackgroundColor
+import com.masarnovsky.big.mvvm.InputFont
 import com.masarnovsky.big.mvvm.GradientColor
 import com.masarnovsky.big.mvvm.Orientation
 import com.masarnovsky.big.mvvm.model.TextDatabase
@@ -25,8 +26,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val _history = MutableStateFlow<List<TextEntity>>(emptyList())
     val history: StateFlow<List<TextEntity>> = _history.asStateFlow()
 
-    private val _selectedFont = MutableStateFlow(defaultFont)
-    val selectedFont: StateFlow<String> = _selectedFont.asStateFlow()
+    private val _selectedFont = MutableStateFlow(defaultInputFont)
+    val selectedInputFont: StateFlow<InputFont> = _selectedFont.asStateFlow()
 
     private val _selectedBackground = MutableStateFlow(defaultBackgroundColor)
     val selectedBackground: StateFlow<BackgroundColor> = _selectedBackground.asStateFlow()
@@ -54,8 +55,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         _inputText.value = text
     }
 
-    fun updateFont(font: String) {
-        _selectedFont.value = font
+    fun updateFont(inputFont: InputFont) {
+        _selectedFont.value = inputFont
     }
 
     fun updateBackground(background: BackgroundColor) {

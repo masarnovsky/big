@@ -17,11 +17,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.masarnovsky.big.getBackgroundColor
-import com.masarnovsky.big.getTextColor
 import com.masarnovsky.big.mvvm.BackgroundColor
+import com.masarnovsky.big.mvvm.InputFont
 import com.masarnovsky.big.mvvm.GradientColor
 import com.masarnovsky.big.mvvm.Orientation
+import com.masarnovsky.big.mvvm.getBackgroundColor
+import com.masarnovsky.big.mvvm.getTextColor
 import com.masarnovsky.big.mvvm.viewmodel.ellipsis
 import com.masarnovsky.big.mvvm.viewmodel.maxAmountOfSymbolsOnShowButton
 import com.masarnovsky.big.mvvm.viewmodel.space
@@ -29,7 +30,7 @@ import com.masarnovsky.big.mvvm.viewmodel.space
 @Composable
 fun PreviewButton(
     text: String,
-    font: String,
+    inputFont: InputFont,
     background: BackgroundColor,
     gradient: GradientColor,
     orientation: Orientation,
@@ -51,7 +52,7 @@ fun PreviewButton(
         Text(
             text = formatFullscreenText(text),
             fontSize = 18.sp,
-            fontFamily = getFontFamily(font),
+            fontFamily = inputFont.fontFamily,
             fontWeight = FontWeight.Bold,
             color = getTextColor(background, enabled),
             textAlign = TextAlign.Center,
@@ -63,7 +64,10 @@ fun PreviewButton(
 
 private fun formatFullscreenText(text: String): String {
     return when {
-        text.length > maxAmountOfSymbolsOnShowButton -> space + text.take(maxAmountOfSymbolsOnShowButton) + ellipsis
+        text.length > maxAmountOfSymbolsOnShowButton -> space + text.take(
+            maxAmountOfSymbolsOnShowButton
+        ) + ellipsis
+
         text.isNotEmpty() -> space + text
         else -> "input text to show"
     }

@@ -1,10 +1,8 @@
-package com.masarnovsky.big
+package com.masarnovsky.big.mvvm
 
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
-import com.masarnovsky.big.mvvm.BackgroundColor
-import com.masarnovsky.big.mvvm.GradientColor
 import kotlin.random.Random
 
 fun getBackgroundColor(background: BackgroundColor, gradient: GradientColor, enabled: Boolean = true): Brush {

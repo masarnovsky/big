@@ -9,6 +9,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import com.masarnovsky.big.mvvm.BackgroundColor
 import com.masarnovsky.big.mvvm.GradientColor
+import com.masarnovsky.big.mvvm.InputFont
 import com.masarnovsky.big.mvvm.Orientation
 import com.masarnovsky.big.mvvm.view.components.FullscreenTextScreen
 
@@ -19,7 +20,8 @@ class FullscreenActivity : ComponentActivity() {
         setupFullscreen()
 
         val displayText = intent.getStringExtra("DISPLAY_TEXT") ?: "No text provided" // ask: what is intent and why i need this?
-        val selectedFont = intent.getStringExtra("SELECTED_FONT") ?: "Montserrat"
+        val selectedFontName = intent.getStringExtra("SELECTED_FONT") ?: InputFont.MONTSERRAT.name
+        val selectedFont = InputFont.valueOf(selectedFontName)
         val selectedBackgroundName = intent.getStringExtra("SELECTED_BACKGROUND") ?: BackgroundColor.BLACK.name
         val selectedBackground = BackgroundColor.valueOf(selectedBackgroundName)
         val selectedGradientName = intent.getStringExtra("SELECTED_GRADIENT") ?: GradientColor.PURPLE_PINK.name
@@ -35,7 +37,7 @@ class FullscreenActivity : ComponentActivity() {
         setContent { // ask: what purpose? open new view?
             FullscreenTextScreen(
                 text = displayText,
-                font = selectedFont,
+                inputFont = selectedFont,
                 background = selectedBackground,
                 orientation = selectedOrientation,
                 gradient = selectedGradient,

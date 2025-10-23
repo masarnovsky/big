@@ -8,16 +8,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.masarnovsky.big.getBackgroundColor
-import com.masarnovsky.big.getTextColor
+import com.masarnovsky.big.mvvm.getBackgroundColor
+import com.masarnovsky.big.mvvm.getTextColor
 import com.masarnovsky.big.mvvm.BackgroundColor
+import com.masarnovsky.big.mvvm.InputFont
 import com.masarnovsky.big.mvvm.GradientColor
 import com.masarnovsky.big.mvvm.Orientation
 
 @Composable
 fun FullscreenTextScreen(
     text: String,
-    font: String,
+    inputFont: InputFont,
     background: BackgroundColor,
     gradient: GradientColor,
     orientation: Orientation,
@@ -30,7 +31,7 @@ fun FullscreenTextScreen(
         )
     }
     val textColor = remember(background) { getTextColor(background) }
-    val fontFamily = remember(font) { getFontFamily(font) }
+    val fontFamily = remember(inputFont) { inputFont.fontFamily } // todo: check
 
     Box(
         modifier = Modifier

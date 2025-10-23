@@ -17,8 +17,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -33,13 +31,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.masarnovsky.big.mvvm.BackgroundColor
 import com.masarnovsky.big.mvvm.GradientColor
+import com.masarnovsky.big.mvvm.InputFont
 import com.masarnovsky.big.mvvm.Orientation
 import com.masarnovsky.big.mvvm.view.components.BackgroundSelector
 import com.masarnovsky.big.mvvm.view.components.FontSelector
 import com.masarnovsky.big.mvvm.view.components.HistoryItem
 import com.masarnovsky.big.mvvm.view.components.OrientationSelector
 import com.masarnovsky.big.mvvm.view.components.PreviewButton
-import com.masarnovsky.big.mvvm.view.components.getFontFamily
 import com.masarnovsky.big.mvvm.viewmodel.MainViewModel
 import com.masarnovsky.big.mvvm.viewmodel.ellipsis
 import com.masarnovsky.big.mvvm.viewmodel.maxAmountOfSymbolsOnShowButton
@@ -91,11 +89,11 @@ fun FullscreenTextTheme(content: @Composable () -> Unit) { // ask: what is that 
 @Composable
 fun MainScreen(
     viewModel: MainViewModel,
-    onShowFullscreen: (String, String, BackgroundColor, GradientColor, Orientation) -> Unit
+    onShowFullscreen: (String, InputFont, BackgroundColor, GradientColor, Orientation) -> Unit
 ) {
     val inputText by viewModel.inputText.collectAsState()
     val history by viewModel.history.collectAsState()
-    val selectedFont by viewModel.selectedFont.collectAsState()
+    val selectedFont by viewModel.selectedInputFont.collectAsState()
     val selectedBackground by viewModel.selectedBackground.collectAsState()
     val selectedGradient by viewModel.selectedGradient.collectAsState()
     val selectedOrientation by viewModel.selectedOrientation.collectAsState()
@@ -168,7 +166,7 @@ fun MainScreen(
 
             PreviewButton(
                 text = inputText,
-                font = selectedFont,
+                inputFont = selectedFont,
                 background = selectedBackground,
                 gradient = selectedGradient,
                 orientation = selectedOrientation,
@@ -187,43 +185,43 @@ fun MainScreen(
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            Button(
-                onClick = {
-                    if (inputText.isNotBlank()) {
-                        viewModel.saveText(inputText)
-                        onShowFullscreen(
-                            inputText,
-                            selectedFont,
-                            selectedBackground,
-                            selectedGradient,
-                            selectedOrientation
-                        )
-                        viewModel.updateInputText("")
-                    }
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(56.dp),
-                enabled = inputText.isNotBlank(),
-                shape = RoundedCornerShape(12.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    contentColor = MaterialTheme.colorScheme.background
-                )
-            ) {
-                Text(
-                    "Show",
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold
-                )
-                Text(
-                    formatFullscreenText(viewModel.inputText.collectAsState().value),
-                    fontSize = 18.sp,
-                    fontFamily = getFontFamily(viewModel.selectedFont.collectAsState().value)
-                )
-            }
-
-            Spacer(modifier = Modifier.height(24.dp))
+//            Button(
+//                onClick = {
+//                    if (inputText.isNotBlank()) {
+//                        viewModel.saveText(inputText)
+//                        onShowFullscreen(
+//                            inputText,
+//                            selectedFont,
+//                            selectedBackground,
+//                            selectedGradient,
+//                            selectedOrientation
+//                        )
+//                        viewModel.updateInputText("")
+//                    }
+//                },
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .height(56.dp),
+//                enabled = inputText.isNotBlank(),
+//                shape = RoundedCornerShape(12.dp),
+//                colors = ButtonDefaults.buttonColors(
+//                    containerColor = MaterialTheme.colorScheme.primary,
+//                    contentColor = MaterialTheme.colorScheme.background
+//                )
+//            ) {
+//                Text(
+//                    "Show",
+//                    fontSize = 18.sp,
+//                    fontWeight = FontWeight.Bold
+//                )
+//                Text(
+//                    formatFullscreenText(viewModel.inputText.collectAsState().value),
+//                    fontSize = 18.sp,
+//                    fontFamily = viewModel.selectedInputFont.collectAsState().value.fontFamily
+//                )
+//            }
+//
+//            Spacer(modifier = Modifier.height(24.dp))
 
             Text(
                 "History",

@@ -19,61 +19,27 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.masarnovsky.big.R
-
-val montserratFontFamily = FontFamily(
-    Font(R.font.montserrat_black, FontWeight.Black)
-)
-
-val pangolinFontFamily = FontFamily(
-    Font(R.font.pangolin_regular, FontWeight.Normal)
-)
-
-val robotoSlabFontFamily = FontFamily(
-    Font(R.font.robotoslab_regular, FontWeight.Normal)
-)
-
-val playfairDisplayFontFamily = FontFamily(
-    Font(R.font.playfairdisplay_regular, FontWeight.Normal)
-)
-
-fun getFontFamily(font: String): FontFamily {
-    return when (font) {
-        "Montserrat" ->  montserratFontFamily
-        "Pangolin" -> pangolinFontFamily
-        "Roboto" -> robotoSlabFontFamily
-        "Playfair" -> playfairDisplayFontFamily
-        else -> FontFamily.Default
-    }
-}
-
+import com.masarnovsky.big.mvvm.InputFont
 
 @Composable
 fun FontSelector(
-    selectedFont: String,
-    onFontSelected: (String) -> Unit
+    selectedFont: InputFont,
+    onFontSelected: (InputFont) -> Unit
 ) {
-    val fonts = listOf(
-        "Montserrat" to montserratFontFamily,
-        "Pangolin" to pangolinFontFamily,
-        "Roboto" to robotoSlabFontFamily,
-        "Playfair" to playfairDisplayFontFamily
-    )
+    val fonts = InputFont.entries.map { Pair(it.label, it) }
 
     LazyRow(
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        items(fonts) { (fontName, fontFamily) ->
+        items(fonts) { (label, font) ->
             FontOption(
-                fontName = fontName,
-                fontFamily = fontFamily,
-                isSelected = selectedFont == fontName,
-                onClick = { onFontSelected(fontName) }
+                fontName = label,
+                fontFamily = font.fontFamily,
+                isSelected = selectedFont == font,
+                onClick = { onFontSelected(font) }
             )
         }
     }

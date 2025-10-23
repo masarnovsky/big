@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -27,9 +28,9 @@ fun AutoSizeTextOptimized(
     minFontSize: Float = 20f,
     maxFontSize: Float = 500f
 ) {
-    var fontSizeValue by remember(text) { mutableStateOf(maxFontSize) }
-    var minSize by remember(text) { mutableStateOf(minFontSize) }
-    var maxSize by remember(text) { mutableStateOf(maxFontSize) }
+    var fontSizeValue by remember(text) { mutableFloatStateOf(maxFontSize) }
+    var minSize by remember(text) { mutableFloatStateOf(minFontSize) }
+    var maxSize by remember(text) { mutableFloatStateOf(maxFontSize) }
     var readyToDraw by remember(text) { mutableStateOf(false) }
 
     val (maxLines, softWrap) = remember(text) {
