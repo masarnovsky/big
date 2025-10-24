@@ -97,6 +97,7 @@ fun MainScreen(
     val selectedBackground by viewModel.selectedBackground.collectAsState()
     val selectedGradient by viewModel.selectedGradient.collectAsState()
     val selectedOrientation by viewModel.selectedOrientation.collectAsState()
+    val shouldShowGradientTooltip by viewModel.shouldShowGradientTooltip.collectAsState(initial = false) // ask: why i need mandatory initial?
 
     Scaffold { padding ->
         Column(
@@ -144,7 +145,9 @@ fun MainScreen(
 
             BackgroundSelector(
                 selectedBackground = selectedBackground,
-                onBackgroundSelected = { viewModel.updateBackground(it) }
+                onBackgroundSelected = { viewModel.updateBackground(it) },
+                shouldShowTooltip_ = shouldShowGradientTooltip,
+                onTooltipShown = viewModel::markTooltipShown
             )
 
             Spacer(modifier = Modifier.height(16.dp))

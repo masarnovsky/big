@@ -9,9 +9,17 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.PlainTooltip
+import androidx.compose.material3.RichTooltip
 import androidx.compose.material3.Text
+import androidx.compose.material3.TooltipAnchorPosition
+import androidx.compose.material3.TooltipBox
+import androidx.compose.material3.TooltipDefaults
+import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -21,22 +29,58 @@ import androidx.compose.ui.unit.sp
 import com.masarnovsky.big.mvvm.BackgroundColor
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BackgroundSelector(
     selectedBackground: BackgroundColor,
-    onBackgroundSelected: (BackgroundColor) -> Unit
+    onBackgroundSelected: (BackgroundColor) -> Unit,
+    shouldShowTooltip_: Boolean,
+    onTooltipShown: () -> Unit
 ) {
+    val shouldShowTooltip = true // todo: remove after testing
     val backgrounds = BackgroundColor.entries.map { Pair(it, it.label) }
+    val tooltipState = rememberTooltipState(initialIsVisible = shouldShowTooltip)
+
+    LaunchedEffect(shouldShowTooltip) {
+        if (shouldShowTooltip) {
+            tooltipState.show()
+        }
+    }
 
     Row(
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         backgrounds.forEach { (value, label) ->
-            BackgroundOption(
-                label = label,
-                isSelected = selectedBackground == value,
-                onClick = { onBackgroundSelected(value) }
-            )
+            if (value == BackgroundColor.GRADIENT) {
+                TooltipBox(
+                    positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
+                        TooltipAnchorPosition.Above,
+                    ),
+                    tooltip = {
+                        PlainTooltip {
+                            Text("Tap to change gradient colors!")
+                        }
+                    },
+                    state = tooltipState
+                ) {
+                    BackgroundOption(
+                        label = label,
+                        isSelected = selectedBackground == value,
+                        onClick = {
+                            if (shouldShowTooltip) {
+                                onTooltipShown()
+                            }
+                            onBackgroundSelected(value)
+                        }
+                    )
+                }
+            } else {
+                BackgroundOption(
+                    label = label,
+                    isSelected = selectedBackground == value,
+                    onClick = { onBackgroundSelected(value) }
+                )
+            }
         }
     }
 }
