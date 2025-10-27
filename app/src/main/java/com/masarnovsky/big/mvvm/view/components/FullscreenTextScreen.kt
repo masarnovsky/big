@@ -44,6 +44,7 @@ fun FullscreenTextScreen(
             text = text,
             color = textColor,
             fontFamily = fontFamily,
+            orientation = orientation,
             modifier = Modifier.fillMaxSize()
         )
     }

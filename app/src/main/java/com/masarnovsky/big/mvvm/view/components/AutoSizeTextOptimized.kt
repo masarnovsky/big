@@ -17,6 +17,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.masarnovsky.big.mvvm.Orientation
 
 
 @Composable
@@ -26,7 +27,8 @@ fun AutoSizeTextOptimized(
     color: Color = Color.White,
     fontFamily: FontFamily = FontFamily.Default,
     minFontSize: Float = 20f,
-    maxFontSize: Float = 500f
+    maxFontSize: Float = 500f,
+    orientation: Orientation
 ) {
     var fontSizeValue by remember(text) { mutableFloatStateOf(maxFontSize) }
     var minSize by remember(text) { mutableFloatStateOf(minFontSize) }
