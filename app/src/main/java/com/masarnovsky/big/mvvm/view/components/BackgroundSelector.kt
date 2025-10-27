@@ -34,12 +34,11 @@ import com.masarnovsky.big.mvvm.BackgroundColor
 fun BackgroundSelector(
     selectedBackground: BackgroundColor,
     onBackgroundSelected: (BackgroundColor) -> Unit,
-    shouldShowTooltip_: Boolean,
+    shouldShowTooltip: Boolean,
     onTooltipShown: () -> Unit
 ) {
-    val shouldShowTooltip = true // todo: remove after testing
     val backgrounds = BackgroundColor.entries.map { Pair(it, it.label) }
-    val tooltipState = rememberTooltipState(initialIsVisible = shouldShowTooltip)
+    val tooltipState = rememberTooltipState(initialIsVisible = shouldShowTooltip, isPersistent = true)
 
     LaunchedEffect(shouldShowTooltip) {
         if (shouldShowTooltip) {
@@ -58,7 +57,7 @@ fun BackgroundSelector(
                     ),
                     tooltip = {
                         PlainTooltip {
-                            Text("Tap to change gradient colors!")
+                            Text("Tap to change gradient")
                         }
                     },
                     state = tooltipState

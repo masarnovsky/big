@@ -146,7 +146,7 @@ fun MainScreen(
             BackgroundSelector(
                 selectedBackground = selectedBackground,
                 onBackgroundSelected = { viewModel.updateBackground(it) },
-                shouldShowTooltip_ = shouldShowGradientTooltip,
+                shouldShowTooltip = shouldShowGradientTooltip,
                 onTooltipShown = viewModel::markTooltipShown
             )
 
