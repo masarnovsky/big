@@ -17,7 +17,7 @@ local.properties
 
 # Built application files
 *.apk
-!*BIG.apk
+!/docs/download/*.apk
 *.aar
 *.ap_
 *.aab
