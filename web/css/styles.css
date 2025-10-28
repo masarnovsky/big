@@ -11,14 +11,12 @@
             line-height: 1.6;
         }
 
-        /* Container */
         .container {
             max-width: 1100px;
             margin: 0 auto;
             padding: 0 20px;
         }
 
-        /* Header/Hero Section - REDESIGNED */
         .hero {
             position: relative;
             text-align: center;
@@ -57,7 +55,6 @@
             font-weight: 400;
         }
 
-        /* Buttons with gradient */
         .button-group {
             display: flex;
             gap: 16px;
@@ -135,7 +132,6 @@
             );
         }
 
-        /* Screenshots Section */
         .screenshots {
             padding: 60px 0 80px;
         }
@@ -159,18 +155,21 @@
 
         .screenshots-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 380px));
             gap: 40px;
             max-width: 900px;
             margin: 0 auto;
+            justify-content: center;
         }
 
         .screenshot-card {
             background-color: #FFFFFF;
-            border-radius: 16px;
-            padding: 24px;
+            border-radius: 20px;
+            padding: 20px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
             transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
         }
 
         .screenshot-card:hover {
@@ -180,24 +179,32 @@
 
         .screenshot-placeholder {
             width: 100%;
-            aspect-ratio: 9/16;
+            aspect-ratio: 9 / 19.5;
             background-color: #E5E5E5;
-            border-radius: 12px;
+            border-radius: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: #3A3A3A;
             font-size: 14px;
             text-align: center;
-            padding: 20px;
+            padding: 0;
             margin-bottom: 16px;
+            overflow: hidden;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
         }
 
         .screenshot-placeholder img {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
-            border-radius: 12px;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 16px;
+            display: block;
+        }
+
+        /* Placeholder text styling when no image */
+        .screenshot-placeholder:not(:has(img)) {
+            padding: 20px;
         }
 
         .screenshot-info {
@@ -275,7 +282,6 @@
             color: #666;
         }
 
-        /* Responsive */
         @media (max-width: 768px) {
             .hero {
                 padding: 80px 20px 60px;
