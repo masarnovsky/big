@@ -36,7 +36,7 @@ android {
             val versionName = android.defaultConfig.versionName
             val buildType = this.name // "release" or "debug"
 
-            output.outputFileName = "BIG.apk"
+            output.outputFileName = "BIG-v${versionName}-${buildType}.apk"
         }
     }
 
