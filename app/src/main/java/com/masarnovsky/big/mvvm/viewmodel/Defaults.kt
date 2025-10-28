@@ -12,4 +12,4 @@ const val space = " "
 
 const val ellipsis = "..."
 
-const val maxAmountOfSymbolsOnShowButton = 14
+const val maxAmountOfSymbolsOnShowButton = 15

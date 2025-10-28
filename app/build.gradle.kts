@@ -50,12 +50,6 @@ android {
     buildFeatures {
         compose = true
     }
-
-    tasks.register<Copy>("copyReleaseApk") {
-        from("app/release")
-        into("../web/apk")
-        include("BIG.apk")
-    }
 }
 
 dependencies {
