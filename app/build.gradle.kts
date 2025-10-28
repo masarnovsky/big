@@ -36,7 +36,7 @@ android {
             val versionName = android.defaultConfig.versionName
             val buildType = this.name // "release" or "debug"
 
-            output.outputFileName = "BIG-v${versionName}-${buildType}.apk"
+            output.outputFileName = "BIG.apk"
         }
     }
 
@@ -49,6 +49,12 @@ android {
     }
     buildFeatures {
         compose = true
+    }
+
+    tasks.register<Copy>("copyReleaseApk") {
+        from("app/release")
+        into("../web/apk")
+        include("BIG.apk")
     }
 }
 
