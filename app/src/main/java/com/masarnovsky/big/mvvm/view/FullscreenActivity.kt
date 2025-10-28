@@ -19,7 +19,7 @@ class FullscreenActivity : ComponentActivity() {
 
         setupFullscreen()
 
-        val displayText = intent.getStringExtra("DISPLAY_TEXT") ?: "No text provided" // ask: what is intent and why i need this?
+        val displayText = intent.getStringExtra("DISPLAY_TEXT") ?: "No text provided"
         val selectedFontName = intent.getStringExtra("SELECTED_FONT") ?: InputFont.MONTSERRAT.name
         val selectedFont = InputFont.valueOf(selectedFontName)
         val selectedBackgroundName = intent.getStringExtra("SELECTED_BACKGROUND") ?: BackgroundColor.BLACK.name

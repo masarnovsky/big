@@ -60,7 +60,7 @@ class MainActivity : ComponentActivity() {
                         val intent =
                             Intent(this, FullscreenActivity::class.java)
                         intent.putExtra("DISPLAY_TEXT", text)
-                        intent.putExtra("SELECTED_FONT", font)
+                        intent.putExtra("SELECTED_FONT", font.name)
                         intent.putExtra("SELECTED_BACKGROUND", background.name)
                         intent.putExtra("SELECTED_ORIENTATION", orientation.name)
                         intent.putExtra("SELECTED_GRADIENT", gradient.name)
@@ -188,44 +188,6 @@ fun MainScreen(
 
             Spacer(modifier = Modifier.height(24.dp))
 
-//            Button(
-//                onClick = {
-//                    if (inputText.isNotBlank()) {
-//                        viewModel.saveText(inputText)
-//                        onShowFullscreen(
-//                            inputText,
-//                            selectedFont,
-//                            selectedBackground,
-//                            selectedGradient,
-//                            selectedOrientation
-//                        )
-//                        viewModel.updateInputText("")
-//                    }
-//                },
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .height(56.dp),
-//                enabled = inputText.isNotBlank(),
-//                shape = RoundedCornerShape(12.dp),
-//                colors = ButtonDefaults.buttonColors(
-//                    containerColor = MaterialTheme.colorScheme.primary,
-//                    contentColor = MaterialTheme.colorScheme.background
-//                )
-//            ) {
-//                Text(
-//                    "Show",
-//                    fontSize = 18.sp,
-//                    fontWeight = FontWeight.Bold
-//                )
-//                Text(
-//                    formatFullscreenText(viewModel.inputText.collectAsState().value),
-//                    fontSize = 18.sp,
-//                    fontFamily = viewModel.selectedInputFont.collectAsState().value.fontFamily
-//                )
-//            }
-//
-//            Spacer(modifier = Modifier.height(24.dp))
-
             Text(
                 "History",
                 fontSize = 20.sp,
@@ -257,16 +219,5 @@ fun MainScreen(
                 }
             }
         }
-    }
-}
-
-private fun formatFullscreenText(text: String): String {
-    return when {
-        text.length > maxAmountOfSymbolsOnShowButton -> space + text.take(
-            maxAmountOfSymbolsOnShowButton
-        ) + ellipsis
-
-        text.isNotEmpty() -> space + text
-        else -> ""
     }
 }
