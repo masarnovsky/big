@@ -7,9 +7,7 @@ import com.masarnovsky.big.mvvm.Orientation
 val defaultInputFont = InputFont.MONTSERRAT
 val defaultBackgroundColor = BackgroundColor.BLACK
 val defaultOrientation = Orientation.LANDSCAPE
-
 const val space = " "
-
 const val ellipsis = "..."
-
 const val maxAmountOfSymbolsOnShowButton = 15
+const val inputTextMaxAmount = 200

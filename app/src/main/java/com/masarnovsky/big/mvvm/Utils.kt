@@ -5,7 +5,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import kotlin.random.Random
 
-fun getBackgroundColor(background: BackgroundColor, gradient: GradientColor, enabled: Boolean = true): Brush {
+fun getBackgroundColor(
+    background: BackgroundColor,
+    gradient: GradientColor,
+    enabled: Boolean = true
+): Brush {
     val alpha = if (enabled) 1f else 0.38f
 
     return when (background) {

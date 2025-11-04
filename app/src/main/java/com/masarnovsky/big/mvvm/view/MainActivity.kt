@@ -39,9 +39,7 @@ import com.masarnovsky.big.mvvm.view.components.HistoryItem
 import com.masarnovsky.big.mvvm.view.components.OrientationSelector
 import com.masarnovsky.big.mvvm.view.components.PreviewButton
 import com.masarnovsky.big.mvvm.viewmodel.MainViewModel
-import com.masarnovsky.big.mvvm.viewmodel.ellipsis
-import com.masarnovsky.big.mvvm.viewmodel.maxAmountOfSymbolsOnShowButton
-import com.masarnovsky.big.mvvm.viewmodel.space
+import com.masarnovsky.big.mvvm.viewmodel.inputTextMaxAmount
 import com.masarnovsky.big.ui.theme.monochromeLight
 
 class MainActivity : ComponentActivity() {
@@ -110,7 +108,7 @@ fun MainScreen(
             OutlinedTextField(
                 value = inputText,
                 onValueChange = { viewModel.updateInputText(it) },
-                label = { Text("Enter text to display") },
+                label = { Text(getLabelText(inputText)) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(120.dp),
@@ -219,5 +217,12 @@ fun MainScreen(
                 }
             }
         }
+    }
+}
+
+fun getLabelText(text: String): String {
+    return when {
+        text.isNotBlank() -> "Enter text to display ${text.length}/$inputTextMaxAmount"
+        else -> "Enter text to display"
     }
 }

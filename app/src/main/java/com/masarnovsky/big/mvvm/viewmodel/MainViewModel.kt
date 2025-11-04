@@ -60,7 +60,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun updateInputText(text: String) {
-        _inputText.value = text
+        if (text.length <= inputTextMaxAmount) {
+            _inputText.value = text
+        }
     }
 
     fun updateFont(inputFont: InputFont) {
