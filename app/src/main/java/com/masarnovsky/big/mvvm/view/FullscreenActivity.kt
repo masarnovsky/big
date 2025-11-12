@@ -34,7 +34,7 @@ class FullscreenActivity : ComponentActivity() {
             else -> ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
         }
 
-        setContent { // ask: what purpose? open new view?
+        setContent {
             FullscreenTextScreen(
                 text = displayText,
                 inputFont = selectedFont,
