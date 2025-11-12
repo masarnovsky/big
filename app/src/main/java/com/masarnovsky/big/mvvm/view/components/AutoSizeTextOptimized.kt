@@ -12,7 +12,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -21,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.TextMeasurer
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -33,6 +33,12 @@ import com.masarnovsky.big.mvvm.Orientation
 import com.masarnovsky.big.mvvm.viewmodel.maxLinesToTryLandscapeDefault
 import com.masarnovsky.big.mvvm.viewmodel.maxLinesToTryPortraitDefault
 import kotlin.math.min
+
+private data class TextFit(
+    val text: String,
+    val fontSize: Float,
+    val usedFraction: Double = 0.0,
+)
 
 @Composable
 fun AutoSizeTextOptimized(
@@ -52,96 +58,29 @@ fun AutoSizeTextOptimized(
         val boxHeightPx = with(LocalDensity.current) { (maxHeight - paddingVertical * 2).toPx() }
         val measurer = rememberTextMeasurer()
 
-        var chosenText by remember(text, maxWidth, maxHeight) { mutableStateOf(text) }
-        var chosenFontSize by remember(
-            text,
-            maxWidth,
-            maxHeight
-        ) { mutableFloatStateOf(minFontSize) }
+        var textFit by remember(text, maxWidth, maxHeight) {
+            mutableStateOf(TextFit(text, minFontSize))
+        }
         var ready by remember(text, maxWidth, maxHeight) { mutableStateOf(false) }
 
         // Avoid blocking UI: run calculation in LaunchedEffect; it's synchronous but safe here.
-        LaunchedEffect(text, boxWidthPx, boxHeightPx) {
+        LaunchedEffect(text, boxWidthPx, boxHeightPx, fontFamily, fontWeight, orientation) {
             ready = false
-
-            val words = text.trim().split("\\s+".toRegex()).filter { it.isNotEmpty() }
-            if (words.isEmpty()) {
-                chosenText = ""
-                chosenFontSize = minFontSize
-                ready = true
-                return@LaunchedEffect
-            }
-
-            val maxLinesToTry =
-                if (orientation == Orientation.LANDSCAPE) maxLinesToTryLandscapeDefault else maxLinesToTryPortraitDefault
-            val maxTry = min(maxLinesToTry, words.size)
-
-            var bestFont = minFontSize
-            var bestBreak = text
-            var bestUsedFraction = 0.0
-
-            // For each candidate number of lines, try to find max font that fits via binary search
-            for (linesCount in 1..maxTry) {
-                val candidate = buildBalancedLines(words, linesCount)
-
-                // binary search font size for this candidate
-                var lo = minFontSize
-                var hi = maxFontSize
-                var bestForCandidate = lo
-
-                while (hi - lo > 0.5f) {
-                    val mid = (lo + hi) / 2f
-                    val style = TextStyle(
-                        fontSize = mid.sp,
-                        fontFamily = fontFamily,
-                        fontWeight = fontWeight,
-                        textAlign = TextAlign.Center
-                    )
-                    val layoutResult = measurer.measure(
-                        text = AnnotatedString(candidate),
-                        style = style,
-                        maxLines = Int.MAX_VALUE
-                    )
-                    val fitsWidth = layoutResult.size.width <= boxWidthPx + 0.5f
-                    val fitsHeight = layoutResult.size.height <= boxHeightPx + 0.5f
-
-                    if (fitsWidth && fitsHeight) {
-                        bestForCandidate = mid
-                        lo = mid
-                    } else {
-                        hi = mid
-                    }
-                }
-
-                // Measure final using bestForCandidate to compute used fraction
-                val finalStyle = TextStyle(
-                    fontSize = bestForCandidate.sp,
-                    fontFamily = fontFamily,
-                    fontWeight = fontWeight,
-                    textAlign = TextAlign.Center
-                )
-                val finalLayout = measurer.measure(
-                    AnnotatedString(candidate),
-                    style = finalStyle,
-                    maxLines = Int.MAX_VALUE
-                )
-                val usedW = min(finalLayout.size.width, boxWidthPx.toInt())
-                val usedH = min(finalLayout.size.height, boxHeightPx.toInt())
-                val usedArea = usedW * usedH
-                val totalArea = boxWidthPx * boxHeightPx
-                val fraction = if (totalArea > 0f) (usedArea / totalArea).toDouble() else 0.0
-
-                // prefer higher fraction; tie-breaker: bigger font (visually nicer)
-                if (fraction > bestUsedFraction || (fraction == bestUsedFraction && bestForCandidate > bestFont)) {
-                    bestUsedFraction = fraction
-                    bestFont = bestForCandidate
-                    bestBreak = candidate
-                }
-            }
-
-            // Final chosen values
-            chosenText = bestBreak
-            chosenFontSize = bestFont
+            val style = TextStyle(
+                fontFamily = fontFamily,
+                fontWeight = fontWeight,
+                textAlign = TextAlign.Center
+            )
+            textFit = findBestFit(
+                text = text,
+                measurer = measurer,
+                boxWidthPx = boxWidthPx,
+                boxHeightPx = boxHeightPx,
+                style = style,
+                orientation = orientation,
+                minFontSize = minFontSize,
+                maxFontSize = maxFontSize,
+            )
             ready = true
         }
 
@@ -153,9 +92,9 @@ fun AutoSizeTextOptimized(
         ) {
             if (ready) {
                 Text(
-                    text = chosenText,
+                    text = textFit.text,
                     color = color,
-                    fontSize = chosenFontSize.sp,
+                    fontSize = textFit.fontSize.sp,
                     fontFamily = fontFamily,
                     fontWeight = fontWeight,
                     textAlign = TextAlign.Center,
@@ -167,6 +106,110 @@ fun AutoSizeTextOptimized(
             }
         }
     }
+}
+
+private fun findBestFit(
+    text: String,
+    measurer: TextMeasurer,
+    boxWidthPx: Float,
+    boxHeightPx: Float,
+    style: TextStyle,
+    orientation: Orientation,
+    minFontSize: Float,
+    maxFontSize: Float,
+): TextFit {
+    val words = text.trim().split("\\s+".toRegex()).filter { it.isNotEmpty() }
+    if (words.isEmpty()) {
+        return TextFit("", minFontSize)
+    }
+
+    val maxLinesToTry =
+        if (orientation == Orientation.LANDSCAPE) maxLinesToTryLandscapeDefault else maxLinesToTryPortraitDefault
+    val maxTry = min(maxLinesToTry, words.size)
+
+    var bestFit = TextFit(text, minFontSize)
+
+    // For each candidate number of lines, try to find max font that fits
+    for (linesCount in 1..maxTry) {
+        val candidateText = buildBalancedLines(words, linesCount)
+
+        val bestFontSizeForCandidate = binarySearchForFontSize(
+            text = candidateText,
+            measurer = measurer,
+            boxWidthPx = boxWidthPx,
+            boxHeightPx = boxHeightPx,
+            style = style,
+            minFontSize = minFontSize,
+            maxFontSize = maxFontSize
+        )
+
+        val fraction = calculateUsedFraction(
+            text = candidateText,
+            fontSize = bestFontSizeForCandidate,
+            measurer = measurer,
+            style = style,
+            boxWidthPx = boxWidthPx,
+            boxHeightPx = boxHeightPx
+        )
+
+        // prefer higher fraction; tie-breaker: bigger font (visually nicer)
+        if (fraction > bestFit.usedFraction || (fraction == bestFit.usedFraction && bestFontSizeForCandidate > bestFit.fontSize)) {
+            bestFit = TextFit(candidateText, bestFontSizeForCandidate, fraction)
+        }
+    }
+
+    return bestFit
+}
+
+private fun binarySearchForFontSize(
+    text: String,
+    measurer: TextMeasurer,
+    boxWidthPx: Float,
+    boxHeightPx: Float,
+    style: TextStyle,
+    minFontSize: Float,
+    maxFontSize: Float,
+): Float {
+    var low = minFontSize
+    var high = maxFontSize
+    var bestSize = low
+
+    while (high - low > 0.5f) {
+        val mid = (low + high) / 2f
+        val currentStyle = style.copy(fontSize = mid.sp)
+        val layoutResult = measurer.measure(
+            text = AnnotatedString(text),
+            style = currentStyle,
+        )
+
+        val fits =
+            layoutResult.size.width <= boxWidthPx + 0.5f && layoutResult.size.height <= boxHeightPx + 0.5f
+
+        if (fits) {
+            bestSize = mid
+            low = mid
+        } else {
+            high = mid
+        }
+    }
+    return bestSize
+}
+
+private fun calculateUsedFraction(
+    text: String,
+    fontSize: Float,
+    measurer: TextMeasurer,
+    style: TextStyle,
+    boxWidthPx: Float,
+    boxHeightPx: Float,
+): Double {
+    val finalStyle = style.copy(fontSize = fontSize.sp)
+    val finalLayout = measurer.measure(AnnotatedString(text), style = finalStyle)
+    val usedW = min(finalLayout.size.width.toFloat(), boxWidthPx)
+    val usedH = min(finalLayout.size.height.toFloat(), boxHeightPx)
+    val usedArea = usedW * usedH
+    val totalArea = boxWidthPx * boxHeightPx
+    return if (totalArea > 0f) (usedArea / totalArea).toDouble() else 0.0
 }
 
 // create roughly balanced lines preserving order
