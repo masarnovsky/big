@@ -1,12 +1,10 @@
 package com.masarnovsky.big.mvvm.view.components
 
-import androidx.compose.foundation.background
+import android.util.Log
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.masarnovsky.big.mvvm.BackgroundColor
 import com.masarnovsky.big.mvvm.GradientColor
@@ -33,19 +31,14 @@ fun FullscreenTextScreen(
     val textColor = remember(background) { getTextColor(background) }
     val fontFamily = remember(inputFont) { inputFont.fontFamily }
 
-    Box(
+    AutoSizeTextOptimized(
+        text = text,
+        color = textColor,
+        fontFamily = fontFamily,
+        background = backgroundColor,
+        orientation = orientation,
         modifier = Modifier
             .fillMaxSize()
-            .background(backgroundColor)
-            .clickable { onExit() },
-        contentAlignment = Alignment.Center
-    ) {
-        AutoSizeTextOptimized(
-            text = text,
-            color = textColor,
-            fontFamily = fontFamily,
-            orientation = orientation,
-            modifier = Modifier.fillMaxSize()
-        )
-    }
+            .clickable { onExit() }
+    )
 }

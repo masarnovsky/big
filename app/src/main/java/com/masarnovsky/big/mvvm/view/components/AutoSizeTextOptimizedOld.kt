@@ -21,11 +21,12 @@ import com.masarnovsky.big.mvvm.Orientation
 
 @Deprecated("New implementation was introduced")
 @Composable
-fun AutoSizeTextOptimizedOld(
+fun AutoSizeTextOptimized_deprecated(
     text: String,
     modifier: Modifier = Modifier,
     color: Color = Color.White,
     fontFamily: FontFamily = FontFamily.Default,
+    orientation: Orientation,
     minFontSize: Float = 20f,
     maxFontSize: Float = 500f
 ) {

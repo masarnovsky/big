@@ -12,14 +12,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.masarnovsky.big.mvvm.BackgroundColor
-import com.masarnovsky.big.mvvm.InputFont
 import com.masarnovsky.big.mvvm.GradientColor
+import com.masarnovsky.big.mvvm.InputFont
 import com.masarnovsky.big.mvvm.Orientation
 import com.masarnovsky.big.mvvm.getBackgroundColor
 import com.masarnovsky.big.mvvm.getTextColor
@@ -37,13 +39,22 @@ fun PreviewButton(
     onShowFullscreen: () -> Unit,
     enabled: Boolean
 ) {
+    val brush = getBackgroundColor(background, gradient, enabled)
+
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .height(56.dp)
+            .shadow(
+                elevation = 6.dp,
+                shape = RoundedCornerShape(12.dp),
+                clip = false,
+                ambientColor = Color.Black.copy(alpha = if (enabled) 1f else 0.1f),  // Less shadow opacity when disabled
+                spotColor = Color.Black.copy(alpha = if (enabled) 1f else 0.1f)
+            )
             .clip(RoundedCornerShape(12.dp))
-            .background( // setup not enabled condition
-                brush = getBackgroundColor(background, gradient, enabled)
+            .background(
+                brush = brush
             )
             .clickable(enabled = enabled) { onShowFullscreen() }
             .padding(16.dp),

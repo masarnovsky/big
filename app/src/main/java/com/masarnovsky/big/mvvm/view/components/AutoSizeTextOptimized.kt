@@ -1,5 +1,6 @@
 package com.masarnovsky.big.mvvm.view.components
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -17,6 +18,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.AnnotatedString
@@ -51,7 +53,8 @@ fun AutoSizeTextOptimized(
     minFontSize: Float = 6f,
     maxFontSize: Float = 900f,
     paddingHorizontal: Dp = 24.dp,
-    paddingVertical: Dp = 24.dp
+    paddingVertical: Dp = 24.dp,
+    background: Brush
 ) {
     BoxWithConstraints(modifier = modifier.background(Color.Black)) {
         val boxWidthPx = with(LocalDensity.current) { (maxWidth - paddingHorizontal * 2).toPx() }
@@ -87,6 +90,7 @@ fun AutoSizeTextOptimized(
         Box(
             modifier = Modifier
                 .fillMaxSize()
+                .background(background)
                 .padding(horizontal = paddingHorizontal, vertical = paddingVertical),
             contentAlignment = Alignment.Center
         ) {
