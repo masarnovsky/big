@@ -11,3 +11,5 @@ const val space = " "
 const val ellipsis = "..."
 const val maxAmountOfSymbolsOnShowButton = 15
 const val inputTextMaxAmount = 200
+const val maxLinesToTryLandscapeDefault = 8
+const val maxLinesToTryPortraitDefault = 20
