@@ -35,7 +35,6 @@ import com.masarnovsky.big.mvvm.viewmodel.maxLinesToTryLandscapeDefault
 import com.masarnovsky.big.mvvm.viewmodel.maxLinesToTryPortraitDefault
 import kotlin.math.min
 
-// Constants for binary search and layout precision
 private const val BINARY_SEARCH_PRECISION = 0.5f
 private const val LAYOUT_TOLERANCE = 0.5f
 
@@ -63,7 +62,6 @@ fun AutoSizeTextOptimized(
         }
         var ready by remember(text, maxWidth, maxHeight) { mutableStateOf(false) }
 
-        // Avoid blocking UI: run calculation in LaunchedEffect; it's synchronous but safe here.
         LaunchedEffect(text, boxWidthPx, boxHeightPx, fontFamily, fontWeight, orientation) {
             ready = false
             val style = TextStyle(

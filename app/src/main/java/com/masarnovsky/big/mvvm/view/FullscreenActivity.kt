@@ -25,28 +25,28 @@ class FullscreenActivity : ComponentActivity() {
         val selectedFont = try {
             val fontName = intent.getStringExtra("SELECTED_FONT") ?: InputFont.MONTSERRAT.name
             InputFont.valueOf(fontName)
-        } catch (e: IllegalArgumentException) {
+        } catch (_: IllegalArgumentException) {
             InputFont.MONTSERRAT
         }
 
         val selectedBackground = try {
             val backgroundName = intent.getStringExtra("SELECTED_BACKGROUND") ?: BackgroundColor.BLACK.name
             BackgroundColor.valueOf(backgroundName)
-        } catch (e: IllegalArgumentException) {
+        } catch (_: IllegalArgumentException) {
             BackgroundColor.BLACK
         }
 
         val selectedGradient = try {
             val gradientName = intent.getStringExtra("SELECTED_GRADIENT") ?: GradientColor.PURPLE_PINK.name
             GradientColor.valueOf(gradientName)
-        } catch (e: IllegalArgumentException) {
+        } catch (_: IllegalArgumentException) {
             GradientColor.PURPLE_PINK
         }
 
         val selectedOrientation = try {
             val orientationName = intent.getStringExtra("SELECTED_ORIENTATION") ?: Orientation.LANDSCAPE.name
             Orientation.valueOf(orientationName)
-        } catch (e: IllegalArgumentException) {
+        } catch (_: IllegalArgumentException) {
             Orientation.LANDSCAPE
         }
 

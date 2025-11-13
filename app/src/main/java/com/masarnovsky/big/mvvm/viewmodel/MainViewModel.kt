@@ -93,29 +93,20 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         _selectedOrientation.value = orientation
     }
 
-    /**
-     * Saves the text to the database using the repository.
-     * The repository handles validation and error handling.
-     */
     fun saveText(text: String) {
         viewModelScope.launch {
             val result = repository.insertText(text)
             result.onFailure { error ->
                 Log.e(TAG, "Failed to save text: ${error.message}", error)
-                // TODO: Show error to user via UI state
             }
         }
     }
 
-    /**
-     * Deletes a text entity from the database.
-     */
     fun deleteText(entity: TextEntity) {
         viewModelScope.launch {
             val result = repository.deleteText(entity)
             result.onFailure { error ->
                 Log.e(TAG, "Failed to delete text: ${error.message}", error)
-                // TODO: Show error to user via UI state
             }
         }
     }

@@ -14,10 +14,6 @@ import java.io.IOException
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "user_preferences")
 
-/**
- * Manages user preferences using DataStore.
- * Handles all user-specific settings and preferences with proper error handling.
- */
 class UserPreferencesManager(private val context: Context) {
 
     private companion object {
@@ -25,10 +21,6 @@ class UserPreferencesManager(private val context: Context) {
         val GRADIENT_TOOLTIP_SHOWN = booleanPreferencesKey("gradient_tooltip_shown")
     }
 
-    /**
-     * Flow indicating whether the user has seen the gradient tooltip.
-     * Returns false by default or if an error occurs.
-     */
     val hasSeenGradientTooltip: Flow<Boolean> = context.dataStore.data
         .catch { exception ->
             if (exception is IOException) {
@@ -42,10 +34,6 @@ class UserPreferencesManager(private val context: Context) {
             preferences[GRADIENT_TOOLTIP_SHOWN] ?: false
         }
 
-    /**
-     * Marks the gradient tooltip as shown.
-     * Throws exception if the operation fails.
-     */
     suspend fun markGradientTooltipShown() {
         try {
             context.dataStore.edit { preferences ->
