@@ -5,7 +5,6 @@ import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -34,6 +33,7 @@ import androidx.compose.ui.unit.sp
 import com.masarnovsky.big.mvvm.BackgroundColor
 import com.masarnovsky.big.mvvm.GradientColor
 import com.masarnovsky.big.mvvm.InputFont
+import com.masarnovsky.big.mvvm.IntentExtras
 import com.masarnovsky.big.mvvm.Orientation
 import com.masarnovsky.big.mvvm.view.components.BackgroundSelector
 import com.masarnovsky.big.mvvm.view.components.FontSelector
@@ -44,9 +44,11 @@ import com.masarnovsky.big.mvvm.view.components.getAppVersion
 import com.masarnovsky.big.mvvm.viewmodel.MainViewModel
 import com.masarnovsky.big.mvvm.viewmodel.inputTextMaxAmount
 import com.masarnovsky.big.ui.theme.monochromeLight
+import dagger.hilt.android.AndroidEntryPoint
+import androidx.hilt.navigation.compose.hiltViewModel
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    private val viewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,25 +58,19 @@ class MainActivity : ComponentActivity() {
         setContent {
             FullscreenTextTheme {
                 MainScreen(
-                    viewModel,
                     onShowFullscreen = { text, font, background, gradient, orientation ->
                         val intent =
                             Intent(this, FullscreenActivity::class.java)
-                        intent.putExtra("DISPLAY_TEXT", text)
-                        intent.putExtra("SELECTED_FONT", font.name)
-                        intent.putExtra("SELECTED_BACKGROUND", background.name)
-                        intent.putExtra("SELECTED_ORIENTATION", orientation.name)
-                        intent.putExtra("SELECTED_GRADIENT", gradient.name)
+                        intent.putExtra(IntentExtras.DISPLAY_TEXT, text)
+                        intent.putExtra(IntentExtras.SELECTED_FONT, font.name)
+                        intent.putExtra(IntentExtras.SELECTED_BACKGROUND, background.name)
+                        intent.putExtra(IntentExtras.SELECTED_ORIENTATION, orientation.name)
+                        intent.putExtra(IntentExtras.SELECTED_GRADIENT, gradient.name)
                         startActivity(intent)
                     }
                 )
             }
         }
-    }
-
-    override fun onPause() {
-        super.onPause()
-        viewModel.updateInputText("")
     }
 }
 
@@ -89,8 +85,8 @@ fun FullscreenTextTheme(content: @Composable () -> Unit) { // ask: what is that 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(
-    viewModel: MainViewModel,
-    onShowFullscreen: (String, InputFont, BackgroundColor, GradientColor, Orientation) -> Unit
+    onShowFullscreen: (String, InputFont, BackgroundColor, GradientColor, Orientation) -> Unit,
+    viewModel: MainViewModel = hiltViewModel()
 ) {
     val inputText by viewModel.inputText.collectAsState()
     val history by viewModel.history.collectAsState()
@@ -98,7 +94,7 @@ fun MainScreen(
     val selectedBackground by viewModel.selectedBackground.collectAsState()
     val selectedGradient by viewModel.selectedGradient.collectAsState()
     val selectedOrientation by viewModel.selectedOrientation.collectAsState()
-    val shouldShowGradientTooltip by viewModel.shouldShowGradientTooltip.collectAsState(initial = false) // ask: why i need mandatory initial?
+    val shouldShowGradientTooltip by viewModel.shouldShowGradientTooltip.collectAsState(initial = false)
 
     Scaffold(bottomBar = {
         Text(

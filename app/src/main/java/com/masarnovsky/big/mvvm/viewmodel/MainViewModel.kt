@@ -1,18 +1,17 @@
 package com.masarnovsky.big.mvvm.viewmodel
 
-import android.app.Application
 import android.util.Log
-import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.masarnovsky.big.mvvm.BackgroundColor
 import com.masarnovsky.big.mvvm.GradientColor
 import com.masarnovsky.big.mvvm.InputFont
 import com.masarnovsky.big.mvvm.Orientation
 import com.masarnovsky.big.mvvm.getRandomGradient
-import com.masarnovsky.big.mvvm.model.TextDatabase
 import com.masarnovsky.big.mvvm.model.TextEntity
 import com.masarnovsky.big.mvvm.model.TextRepository
 import com.masarnovsky.big.mvvm.model.UserPreferencesManager
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -20,17 +19,21 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class MainViewModel(application: Application) : AndroidViewModel(application) {
+/**
+ * ViewModel for the main screen.
+ * Uses Hilt for dependency injection to provide repository and preferences manager.
+ */
+@HiltViewModel
+class MainViewModel @Inject constructor(
+    private val repository: TextRepository,
+    private val preferencesManager: UserPreferencesManager
+) : ViewModel() {
 
     companion object {
         private const val TAG = "MainViewModel"
     }
-
-    private val preferencesManager = UserPreferencesManager(application)
-    // TODO: Replace with proper dependency injection (Hilt/Koin) for better testability
-    private val database = TextDatabase.getDatabase(application)
-    private val repository = TextRepository(database.textDao())
 
     private val _inputText = MutableStateFlow("")
     val inputText: StateFlow<String> = _inputText.asStateFlow()
