@@ -1,6 +1,7 @@
 package com.masarnovsky.big.mvvm.viewmodel
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.masarnovsky.big.mvvm.BackgroundColor
@@ -10,20 +11,26 @@ import com.masarnovsky.big.mvvm.Orientation
 import com.masarnovsky.big.mvvm.getRandomGradient
 import com.masarnovsky.big.mvvm.model.TextDatabase
 import com.masarnovsky.big.mvvm.model.TextEntity
+import com.masarnovsky.big.mvvm.model.TextRepository
 import com.masarnovsky.big.mvvm.model.UserPreferencesManager
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
 
+    companion object {
+        private const val TAG = "MainViewModel"
+    }
+
     private val preferencesManager = UserPreferencesManager(application)
-    private val database =
-        TextDatabase.Companion.getDatabase(application) // FIXME: move to correct layer (for test purposes!) - use chat https://claude.ai/chat/b6e0b0ec-ba9a-49d9-ac05-25b9d9f44af6
-    private val dao = database.textDao()
+    // TODO: Replace with proper dependency injection (Hilt/Koin) for better testability
+    private val database = TextDatabase.getDatabase(application)
+    private val repository = TextRepository(database.textDao())
 
     private val _inputText = MutableStateFlow("")
     val inputText: StateFlow<String> = _inputText.asStateFlow()
@@ -53,9 +60,14 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private fun loadHistory() {
         viewModelScope.launch {
-            dao.getAllTexts().collect { texts ->
-                _history.value = texts
-            }
+            repository.getAllTexts()
+                .catch { e ->
+                    Log.e(TAG, "Error loading history", e)
+                    emit(emptyList())
+                }
+                .collect { texts ->
+                    _history.value = texts
+                }
         }
     }
 
@@ -82,22 +94,30 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun saveText(text: String) {
-        if (text.isNotBlank()) {
-            viewModelScope.launch {
-                dao.insert(TextEntity(text = text))
+        viewModelScope.launch {
+            val result = repository.insertText(text)
+            result.onFailure { error ->
+                Log.e(TAG, "Failed to save text: ${error.message}", error)
             }
         }
     }
 
     fun deleteText(entity: TextEntity) {
         viewModelScope.launch {
-            dao.delete(entity)
+            val result = repository.deleteText(entity)
+            result.onFailure { error ->
+                Log.e(TAG, "Failed to delete text: ${error.message}", error)
+            }
         }
     }
 
     fun markTooltipShown() {
         viewModelScope.launch {
-            preferencesManager.markGradientTooltipShown()
+            try {
+                preferencesManager.markGradientTooltipShown()
+            } catch (e: Exception) {
+                Log.e(TAG, "Failed to mark tooltip as shown", e)
+            }
         }
     }
 }

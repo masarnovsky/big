@@ -19,15 +19,36 @@ class FullscreenActivity : ComponentActivity() {
 
         setupFullscreen()
 
+        // Safely parse intent extras with error handling
         val displayText = intent.getStringExtra("DISPLAY_TEXT") ?: "No text provided"
-        val selectedFontName = intent.getStringExtra("SELECTED_FONT") ?: InputFont.MONTSERRAT.name
-        val selectedFont = InputFont.valueOf(selectedFontName)
-        val selectedBackgroundName = intent.getStringExtra("SELECTED_BACKGROUND") ?: BackgroundColor.BLACK.name
-        val selectedBackground = BackgroundColor.valueOf(selectedBackgroundName)
-        val selectedGradientName = intent.getStringExtra("SELECTED_GRADIENT") ?: GradientColor.PURPLE_PINK.name
-        val selectedGradient = GradientColor.valueOf(selectedGradientName)
-        val selectedOrientationName = intent.getStringExtra("SELECTED_ORIENTATION") ?: Orientation.LANDSCAPE.name
-        val selectedOrientation = Orientation.valueOf(selectedOrientationName)
+
+        val selectedFont = try {
+            val fontName = intent.getStringExtra("SELECTED_FONT") ?: InputFont.MONTSERRAT.name
+            InputFont.valueOf(fontName)
+        } catch (_: IllegalArgumentException) {
+            InputFont.MONTSERRAT
+        }
+
+        val selectedBackground = try {
+            val backgroundName = intent.getStringExtra("SELECTED_BACKGROUND") ?: BackgroundColor.BLACK.name
+            BackgroundColor.valueOf(backgroundName)
+        } catch (_: IllegalArgumentException) {
+            BackgroundColor.BLACK
+        }
+
+        val selectedGradient = try {
+            val gradientName = intent.getStringExtra("SELECTED_GRADIENT") ?: GradientColor.PURPLE_PINK.name
+            GradientColor.valueOf(gradientName)
+        } catch (_: IllegalArgumentException) {
+            GradientColor.PURPLE_PINK
+        }
+
+        val selectedOrientation = try {
+            val orientationName = intent.getStringExtra("SELECTED_ORIENTATION") ?: Orientation.LANDSCAPE.name
+            Orientation.valueOf(orientationName)
+        } catch (_: IllegalArgumentException) {
+            Orientation.LANDSCAPE
+        }
 
         requestedOrientation = when (selectedOrientation) {
             Orientation.PORTRAIT -> ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
