@@ -26,7 +26,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.masarnovsky.big.mvvm.BackgroundColor
@@ -38,6 +40,7 @@ import com.masarnovsky.big.mvvm.view.components.FontSelector
 import com.masarnovsky.big.mvvm.view.components.HistoryItem
 import com.masarnovsky.big.mvvm.view.components.OrientationSelector
 import com.masarnovsky.big.mvvm.view.components.PreviewButton
+import com.masarnovsky.big.mvvm.view.components.getAppVersion
 import com.masarnovsky.big.mvvm.viewmodel.MainViewModel
 import com.masarnovsky.big.mvvm.viewmodel.inputTextMaxAmount
 import com.masarnovsky.big.ui.theme.monochromeLight
@@ -97,7 +100,17 @@ fun MainScreen(
     val selectedOrientation by viewModel.selectedOrientation.collectAsState()
     val shouldShowGradientTooltip by viewModel.shouldShowGradientTooltip.collectAsState(initial = false) // ask: why i need mandatory initial?
 
-    Scaffold { padding ->
+    Scaffold(bottomBar = {
+        Text(
+            text = "v${getAppVersion()}",
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp),
+            textAlign = TextAlign.Center
+        )
+    }) { padding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()

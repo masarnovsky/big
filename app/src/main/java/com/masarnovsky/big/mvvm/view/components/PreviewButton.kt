@@ -49,7 +49,7 @@ fun PreviewButton(
                 elevation = 6.dp,
                 shape = RoundedCornerShape(12.dp),
                 clip = false,
-                ambientColor = Color.Black.copy(alpha = if (enabled) 1f else 0.1f),  // Less shadow opacity when disabled
+                ambientColor = Color.Black.copy(alpha = if (enabled) 1f else 0.1f),
                 spotColor = Color.Black.copy(alpha = if (enabled) 1f else 0.1f)
             )
             .clip(RoundedCornerShape(12.dp))

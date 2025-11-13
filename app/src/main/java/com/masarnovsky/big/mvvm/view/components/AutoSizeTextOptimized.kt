@@ -1,6 +1,5 @@
 package com.masarnovsky.big.mvvm.view.components
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -35,12 +34,6 @@ import com.masarnovsky.big.mvvm.Orientation
 import com.masarnovsky.big.mvvm.viewmodel.maxLinesToTryLandscapeDefault
 import com.masarnovsky.big.mvvm.viewmodel.maxLinesToTryPortraitDefault
 import kotlin.math.min
-
-private data class TextFit(
-    val text: String,
-    val fontSize: Float,
-    val usedFraction: Double = 0.0,
-)
 
 @Composable
 fun AutoSizeTextOptimized(
@@ -238,3 +231,9 @@ fun buildBalancedLines(words: List<String>, linesCount: Int): String {
     }
     return sb.toString()
 }
+
+private data class TextFit(
+    val text: String,
+    val fontSize: Float,
+    val usedFraction: Double = 0.0,
+)
