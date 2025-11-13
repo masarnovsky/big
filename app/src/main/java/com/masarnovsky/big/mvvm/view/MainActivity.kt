@@ -71,11 +71,6 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-
-    override fun onPause() {
-        super.onPause()
-        viewModel.updateInputText("")
-    }
 }
 
 @Composable

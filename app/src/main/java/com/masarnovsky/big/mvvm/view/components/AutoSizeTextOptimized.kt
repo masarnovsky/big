@@ -35,6 +35,10 @@ import com.masarnovsky.big.mvvm.viewmodel.maxLinesToTryLandscapeDefault
 import com.masarnovsky.big.mvvm.viewmodel.maxLinesToTryPortraitDefault
 import kotlin.math.min
 
+// Constants for binary search and layout precision
+private const val BINARY_SEARCH_PRECISION = 0.5f
+private const val LAYOUT_TOLERANCE = 0.5f
+
 @Composable
 fun AutoSizeTextOptimized(
     text: String,
@@ -171,7 +175,7 @@ private fun binarySearchForFontSize(
     var high = maxFontSize
     var bestSize = low
 
-    while (high - low > 0.5f) {
+    while (high - low > BINARY_SEARCH_PRECISION) {
         val mid = (low + high) / 2f
         val currentStyle = style.copy(fontSize = mid.sp)
         val layoutResult = measurer.measure(
@@ -180,7 +184,7 @@ private fun binarySearchForFontSize(
         )
 
         val fits =
-            layoutResult.size.width <= boxWidthPx + 0.5f && layoutResult.size.height <= boxHeightPx + 0.5f
+            layoutResult.size.width <= boxWidthPx + LAYOUT_TOLERANCE && layoutResult.size.height <= boxHeightPx + LAYOUT_TOLERANCE
 
         if (fits) {
             bestSize = mid
