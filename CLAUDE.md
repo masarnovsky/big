@@ -18,58 +18,7 @@ Quick reference guide for AI assistants working with the BIG Android application
 
 ---
 
-## Essential File Locations
-
-```
-app/src/main/java/com/masarnovsky/big/mvvm/
-├── Enums.kt                           # BackgroundColor, InputFont, Orientation
-├── Utils.kt                           # Color mapping, gradient functions
-├── viewmodel/
-│   ├── MainViewModel.kt               # Main state management
-│   └── Defaults.kt                    # Constants (e.g., inputTextMaxAmount)
-├── model/
-│   ├── TextEntity.kt                  # Room entity
-│   ├── TextDao.kt                     # Database queries
-│   ├── TextRepository.kt              # Data abstraction
-│   └── UserPreferencesManager.kt      # DataStore preferences
-└── view/
-    ├── MainActivity.kt                # Main entry
-    ├── FullscreenActivity.kt          # Fullscreen display
-    └── components/                    # Reusable Composables
-```
-
-**Config Files:**
-- `app/build.gradle.kts` - Dependencies, version, APK naming
-- `gradle/libs.versions.toml` - Version catalog
-- `app/src/main/AndroidManifest.xml` - Activities, permissions
-
----
-
 ## Quick Commands
-
-### Build & Deploy
-
-```bash
-# Clean build
-./gradlew clean
-
-# Build debug APK
-./gradlew assembleDebug
-
-# Build release APK (with minification)
-./gradlew assembleRelease
-
-# Install debug on device
-./gradlew installDebug
-
-# View dependencies
-./gradlew app:dependencies
-
-# Release automation (moves APK to docs/download/)
-./release.sh
-```
-
-**APK Output:** `app/build/outputs/release/BIG-v{version}-release.apk`
 
 ### Version Update
 
@@ -273,61 +222,6 @@ fun getAllTexts(): Flow<List<TextEntity>> {
             emit(emptyList())
         }
 }
-```
-
----
-
-## Common Tasks
-
-### Add New Background Color
-
-1. **Enums.kt**: Add enum value
-   ```kotlin
-   enum class BackgroundColor {
-       WHITE, BLACK, RED, BLUE, YELLOW, GREEN, RANDOM, PURPLE  // Add
-   }
-   ```
-
-2. **Utils.kt**: Add color mapping
-   ```kotlin
-   fun getBackgroundColor(background: BackgroundColor): Color {
-       return when (background) {
-           // ... existing
-           BackgroundColor.PURPLE -> Color(0xFF9C27B0)
-       }
-   }
-   ```
-
-3. **BackgroundSelector.kt**: Add UI button
-
-### Add New Font
-
-1. Add `.ttf` file to `app/src/main/res/font/`
-2. **Enums.kt**: Add `InputFont.NEW_FONT`
-3. **FontSelector.kt**: Map to `R.font.new_font`
-
-### Add DataStore Preference
-
-1. **UserPreferencesManager.kt**:
-   ```kotlin
-   private val NEW_PREF = stringPreferencesKey("new_pref")
-
-   suspend fun saveNewPref(value: String) {
-       dataStore.edit { it[NEW_PREF] = value }
-   }
-
-   val newPrefFlow: Flow<String> = dataStore.data
-       .map { it[NEW_PREF] ?: "default" }
-       .catch { emit("default") }
-   ```
-
-2. **MainViewModel.kt**: Add StateFlow and collect
-
-### Change Character Limit
-
-**Defaults.kt**:
-```kotlin
-const val inputTextMaxAmount = 300  // Changed from 200
 ```
 
 ---
