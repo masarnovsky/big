@@ -19,6 +19,7 @@ local.properties
 *.apk
 # for web
 !docs/download/*.apk
+!history/*.apk
 *.aar
 *.ap_
 *.aab
