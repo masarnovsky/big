@@ -35,6 +35,11 @@ import com.masarnovsky.big.mvvm.BackgroundColor
 import com.masarnovsky.big.mvvm.GradientColor
 import com.masarnovsky.big.mvvm.InputFont
 import com.masarnovsky.big.mvvm.Orientation
+import com.masarnovsky.big.mvvm.view.IntentExtras.DISPLAY_TEXT
+import com.masarnovsky.big.mvvm.view.IntentExtras.SELECTED_BACKGROUND
+import com.masarnovsky.big.mvvm.view.IntentExtras.SELECTED_FONT
+import com.masarnovsky.big.mvvm.view.IntentExtras.SELECTED_GRADIENT
+import com.masarnovsky.big.mvvm.view.IntentExtras.SELECTED_ORIENTATION
 import com.masarnovsky.big.mvvm.view.components.BackgroundSelector
 import com.masarnovsky.big.mvvm.view.components.FontSelector
 import com.masarnovsky.big.mvvm.view.components.HistoryItem
@@ -60,11 +65,11 @@ class MainActivity : ComponentActivity() {
                     onShowFullscreen = { text, font, background, gradient, orientation ->
                         val intent =
                             Intent(this, FullscreenActivity::class.java)
-                        intent.putExtra("DISPLAY_TEXT", text)
-                        intent.putExtra("SELECTED_FONT", font.name)
-                        intent.putExtra("SELECTED_BACKGROUND", background.name)
-                        intent.putExtra("SELECTED_ORIENTATION", orientation.name)
-                        intent.putExtra("SELECTED_GRADIENT", gradient.name)
+                        intent.putExtra(DISPLAY_TEXT, text)
+                        intent.putExtra(SELECTED_FONT, font.name)
+                        intent.putExtra(SELECTED_BACKGROUND, background.name)
+                        intent.putExtra(SELECTED_ORIENTATION, orientation.name)
+                        intent.putExtra(SELECTED_GRADIENT, gradient.name)
                         startActivity(intent)
                     }
                 )
