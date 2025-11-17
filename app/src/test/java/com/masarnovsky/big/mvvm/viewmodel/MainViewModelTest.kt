@@ -78,18 +78,18 @@ class MainViewModelTest {
 
     @Test
     fun `GIVEN valid background WHEN updateBackground THEN updates background successfully`() = runTest {
-        viewModel.updateBackground(BackgroundColor.BLUE)
+        viewModel.updateBackground(BackgroundColor.WHITE)
         advanceUntilIdle()
 
-        assertThat(viewModel.selectedBackground.value).isEqualTo(BackgroundColor.BLUE)
+        assertThat(viewModel.selectedBackground.value).isEqualTo(BackgroundColor.WHITE)
     }
 
     @Test
     fun `GIVEN valid gradient WHEN updateGradient THEN updates gradient successfully`() = runTest {
-        viewModel.updateGradient(GradientColor.SUNSET)
+        viewModel.updateGradient(GradientColor.PURPLE_PINK)
         advanceUntilIdle()
 
-        assertThat(viewModel.selectedGradient.value).isEqualTo(GradientColor.SUNSET)
+        assertThat(viewModel.selectedGradient.value).isEqualTo(GradientColor.PURPLE_PINK)
     }
 
     @Test
@@ -292,16 +292,16 @@ class MainViewModelTest {
     @Test
     fun `GIVEN sequential updates WHEN rapid state changes THEN final state is correct`() = runTest {
         viewModel.updateInputText("Text 1")
-        viewModel.updateFont(InputFont.BEBAS)
-        viewModel.updateBackground(BackgroundColor.RED)
-        viewModel.updateGradient(GradientColor.OCEAN)
+        viewModel.updateFont(InputFont.ROBOTO_SLAB)
+        viewModel.updateBackground(BackgroundColor.WHITE)
+        viewModel.updateGradient(GradientColor.BLUE_PURPLE)
         viewModel.updateOrientation(Orientation.LANDSCAPE)
         advanceUntilIdle()
 
         assertThat(viewModel.inputText.value).isEqualTo("Text 1")
-        assertThat(viewModel.selectedInputFont.value).isEqualTo(InputFont.BEBAS)
-        assertThat(viewModel.selectedBackground.value).isEqualTo(BackgroundColor.RED)
-        assertThat(viewModel.selectedGradient.value).isEqualTo(GradientColor.OCEAN)
+        assertThat(viewModel.selectedInputFont.value).isEqualTo(InputFont.ROBOTO_SLAB)
+        assertThat(viewModel.selectedBackground.value).isEqualTo(BackgroundColor.WHITE)
+        assertThat(viewModel.selectedGradient.value).isEqualTo(GradientColor.BLUE_PURPLE)
         assertThat(viewModel.selectedOrientation.value).isEqualTo(Orientation.LANDSCAPE)
     }
 

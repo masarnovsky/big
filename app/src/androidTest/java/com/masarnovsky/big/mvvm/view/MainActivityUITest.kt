@@ -212,12 +212,12 @@ class MainActivityUITest {
         composeTestRule.onNodeWithText("Pangolin").performClick()
         composeTestRule.onNodeWithText("Roboto").performClick()
         composeTestRule.onNodeWithText("Playfair").performClick()
-        composeTestRule.onNodeWithText("Bebas").performClick()
+        composeTestRule.onNodeWithText("Montserrat").performClick()
         composeTestRule.waitForIdle()
 
         // All should still be displayed
         composeTestRule.onNodeWithText("Pangolin").assertIsDisplayed()
-        composeTestRule.onNodeWithText("Bebas").assertIsDisplayed()
+        composeTestRule.onNodeWithText("Montserrat").assertIsDisplayed()
     }
 
     @Test
@@ -238,7 +238,7 @@ class MainActivityUITest {
         composeTestRule.waitForIdle()
 
         // Change font
-        composeTestRule.onNodeWithText("Bebas").performClick()
+        composeTestRule.onNodeWithText("Roboto").performClick()
         composeTestRule.waitForIdle()
 
         // Add more text
