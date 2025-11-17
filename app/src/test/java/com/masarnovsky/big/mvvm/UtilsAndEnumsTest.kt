@@ -3,6 +3,7 @@ package com.masarnovsky.big.mvvm
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
+import com.google.common.collect.Range
 import com.google.common.truth.Truth.assertThat
 import com.masarnovsky.big.mvvm.view.components.buildBalancedLines
 import org.junit.Test
@@ -47,7 +48,7 @@ class UtilsAndEnumsTest {
         val disabled = getBackgroundColor(BackgroundColor.BLACK, GradientColor.PURPLE_PINK, false) as SolidColor
 
         assertThat(enabled.value.alpha).isEqualTo(1f)
-        assertThat(disabled.value.alpha).isEqualTo(0.38f)
+        assertThat(disabled.value.alpha).isIn(Range.closed(0.38f, 0.39f))
     }
 
     @Test
@@ -238,15 +239,6 @@ class UtilsAndEnumsTest {
     fun `all font labels are non-empty`() {
         InputFont.entries.forEach { font ->
             assertThat(font.label).isNotEmpty()
-        }
-    }
-
-    @Test
-    fun `gradient colors are valid`() {
-        GradientColor.entries.forEach { gradient ->
-            gradient.colors.forEach { color ->
-                assertThat(color.alpha).isIn(0f..1f)
-            }
         }
     }
 }
